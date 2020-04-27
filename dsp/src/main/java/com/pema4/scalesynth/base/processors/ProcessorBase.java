@@ -2,7 +2,7 @@ package com.pema4.scalesynth.base.processors;
 
 import com.pema4.scalesynth.base.KeyboardEvent;
 
-public abstract class OneChannelProcessorBase implements Processor {
+public abstract class ProcessorBase implements Processor {
     protected float sampleRate;
 
     /**

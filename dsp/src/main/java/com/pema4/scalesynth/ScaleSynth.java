@@ -5,6 +5,7 @@ import com.pema4.scalesynth.base.generators.Generator;
 import com.pema4.scalesynth.base.generators.PolyGenerator;
 import com.pema4.scalesynth.dsp.generators.TestSineGenerator;
 import com.pema4.scalesynth.dsp.processors.DecayAmpEnvelope;
+import com.pema4.scalesynth.dsp.processors.Delay;
 
 
 /**
@@ -13,7 +14,7 @@ import com.pema4.scalesynth.dsp.processors.DecayAmpEnvelope;
  */
 public class ScaleSynth implements Generator {
     private final Generator generator = new PolyGenerator(8, () ->
-            new TestSineGenerator().then(new DecayAmpEnvelope()));
+            new TestSineGenerator().then(new DecayAmpEnvelope())).then(new Delay());
     //private final Generator generator = new TestSineGenerator();
 
     @Override
