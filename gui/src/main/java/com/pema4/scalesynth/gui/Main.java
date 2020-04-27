@@ -1,0 +1,68 @@
+package com.pema4.scalesynth.gui;
+
+import com.pema4.scalesynth.ScaleSynth;
+import com.pema4.scalesynth.gui.services.MidiService;
+import com.pema4.scalesynth.gui.views.AsioSettingsView;
+import com.pema4.scalesynth.gui.views.KeyboardView;
+import com.pema4.scalesynth.gui.views.MidiSettingsView;
+import javafx.application.Application;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.scene.input.KeyEvent;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
+
+public class Main extends Application {
+    private final ScaleSynth synth = new ScaleSynth();
+    private final SynthMidiAdapter midiAdapter = new SynthMidiAdapter(synth);
+    private final SynthAsioAdapter asioAdapter = new SynthAsioAdapter(synth);
+
+    public static void main(String[] args) {
+        System.setProperty("java.library.path", "C:\\javalibs\\jasiohost\\lib");
+        launch(args);
+    }
+
+    @Override
+    public void start(Stage primaryStage) throws Exception {
+        Parent root = createUI();
+        primaryStage.setTitle("Hello World");
+        primaryStage.setScene(new Scene(root));
+        primaryStage.show();
+    }
+
+    private Parent createUI() {
+        var pane = new BorderPane();
+
+        var settings = new VBox(5,
+                new MidiSettingsView(midiAdapter, new MidiService()),
+                new AsioSettingsView(asioAdapter)
+        );
+        pane.setCenter(settings);
+
+        pane.setBottom(new KeyboardView(midiAdapter));
+
+        pane.addEventFilter(KeyEvent.ANY, new KeyEventFilter(midiAdapter));
+        return pane;
+    }
+
+    /**
+     * This method is called when the application should stop, and provides a
+     * convenient place to prepare for application exit and destroy resources.
+     *
+     * <p>
+     * The implementation of this method provided by the Application class does nothing.
+     * </p>
+     *
+     * <p>
+     * NOTE: This method is called on the JavaFX Application Thread.
+     * </p>
+     *
+     * @throws Exception if something goes wrong
+     */
+    @Override
+    public void stop() throws Exception {
+        asioAdapter.stop();
+        midiAdapter.close();
+    }
+}

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox alignment="CENTER" spacing="10.0" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.pema4.scalesynth.gui.views.MidiSettingsView">
+   <children>
+         <ComboBox fx:id="midiInputsComboBox" minWidth="200.0"/>
+      <Button mnemonicParsing="false" onAction="#onUpdateButtonPress" text="Update" />
+   </children>
+</VBox>
