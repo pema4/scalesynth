@@ -2,9 +2,9 @@ package com.pema4.scalesynth.dsp.processors;
 
 import com.pema4.scalesynth.base.KeyboardEvent;
 import com.pema4.scalesynth.base.KeyboardEventType;
-import com.pema4.scalesynth.base.processors.OneChannelProcessorBase;
+import com.pema4.scalesynth.base.processors.ProcessorBase;
 
-public class DecayAmpEnvelope extends OneChannelProcessorBase {
+public class DecayAmpEnvelope extends ProcessorBase {
 
     private float amplitude;
     private float coef;
