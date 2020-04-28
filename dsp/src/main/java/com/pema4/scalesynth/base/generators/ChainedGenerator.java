@@ -7,10 +7,8 @@ import com.pema4.scalesynth.base.processors.Processor;
 import java.util.Arrays;
 
 class ChainedGenerator implements Generator {
-    private Generator generator;
-    private Processor[] processors;
-
-    private static final transient boolean kek = false;
+    private final Generator generator;
+    private final Processor[] processors;
 
     private ChainedGenerator(Generator generator, Processor... processors) {
         this.generator = generator;
