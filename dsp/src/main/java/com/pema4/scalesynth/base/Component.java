@@ -1,7 +1,5 @@
 package com.pema4.scalesynth.base;
 
-import com.pema4.scalesynth.base.parameters.Parameter;
-
 import java.io.Serializable;
 import java.util.List;
 
@@ -25,12 +23,6 @@ public interface Component extends Serializable {
      * @return a sample rate used in processing.
      */
     float getSampleRate();
-
-    /**
-     * Returns a list of parameters used in this component.
-     * @return a list of parameters used in this component.
-     */
-    default List<Parameter> getParameters() {return null;}
 
     /**
      * Reports a latency of this component (in samples)

@@ -3,6 +3,7 @@ package com.pema4.scalesynth.gui;
 import com.pema4.scalesynth.ScaleSynth;
 import com.pema4.scalesynth.gui.services.MidiService;
 import com.pema4.scalesynth.gui.views.AsioSettingsView;
+import com.pema4.scalesynth.gui.views.EditorView;
 import com.pema4.scalesynth.gui.views.KeyboardView;
 import com.pema4.scalesynth.gui.views.MidiSettingsView;
 import javafx.application.Application;
@@ -24,7 +25,7 @@ public class Main extends Application {
     }
 
     @Override
-    public void start(Stage primaryStage) throws Exception {
+    public void start(Stage primaryStage) {
         Parent root = createUI();
         primaryStage.setTitle("Hello World");
         primaryStage.setScene(new Scene(root));
@@ -38,7 +39,8 @@ public class Main extends Application {
                 new MidiSettingsView(midiAdapter, new MidiService()),
                 new AsioSettingsView(asioAdapter)
         );
-        pane.setCenter(settings);
+        pane.setRight(settings);
+        pane.setCenter(new EditorView(synth.getParameters()));
 
         pane.setBottom(new KeyboardView(midiAdapter));
 
@@ -57,11 +59,9 @@ public class Main extends Application {
      * <p>
      * NOTE: This method is called on the JavaFX Application Thread.
      * </p>
-     *
-     * @throws Exception if something goes wrong
      */
     @Override
-    public void stop() throws Exception {
+    public void stop() {
         asioAdapter.stop();
         midiAdapter.close();
     }

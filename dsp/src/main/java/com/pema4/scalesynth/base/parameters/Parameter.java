@@ -1,40 +1,89 @@
 package com.pema4.scalesynth.base.parameters;
 
-import com.pema4.scalesynth.base.generators.Generator;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
- * Parameters are used to control synthesis.
- * Also they can be saved to file and restored later.
+ * Represents a parameter wrapper.
+ *
+ * Parameters are exposed settings of synthesis.
+ * They can be modified from UI.
  */
-public interface Parameter<T> extends Generator {
+public class Parameter<T> {
+    private final String name;
+    private final List<ParameterChangeListener<T>> listeners = new ArrayList<>();
+    private final T defaultValue;
+    private T value;
+
+    public Parameter(String name, T defaultValue) {
+        this.name = name;
+        this.defaultValue = defaultValue;
+    }
 
     /**
-     * Name of the parameter. Must be unique.
-     * @return identifier of this parameter.
+     * Name of the parameter.
+     *
+     * @return name of this parameter.
      */
-    String getId();
+    public String getName() {
+        return name;
+    }
 
     /**
-     * Sets the value of this parameter.
-     * @param newValue new value of this parameter.
+     * Derived classes should override this method to perform any checks in the setter.
+     *
+     * @param value value to be checked.
+     * @return {@code true} if value is correct, otherwise {@code false}.
      */
-    void setValue(T newValue);
+    protected boolean checkValue(T value) {
+        return true;
+    }
 
     /**
      * Returns the value of this parameter.
+     *
      * @return the value of this parameter.
      */
-    T getValue();
-
-    public static Parameter<Float> floatParameter(String id) {
-        return new ParameterImpl<Float>(id);
+    public T getValue() {
+        return value;
     }
 
-    public static Parameter<Integer> integerParameter(String id) {
-        return new ParameterImpl<Integer>(id);
+    /**
+     * Sets a new value of this parameter. Also notifies all listeners if value changed
+     *
+     * @param value value to be set.
+     */
+    public void setValue(T value) {
+        if (checkValue(value) && this.value != value) {
+            this.value = value;
+            for (var listener : listeners)
+                listener.valueChanged(value);
+        }
     }
 
-    public static Parameter<Boolean> booleanParameter(String id) {
-        return new ParameterImpl<Boolean>(id);
+    /**
+     * Attaches change listener to this parameter.
+     *
+     * @param listener listener to be attached.
+     */
+    public void addListener(ParameterChangeListener<T> listener) {
+        listeners.add(listener);
+    }
+
+    /**
+     * Detaches change listener from this parameter (if it was attached).
+     *
+     * @param listener listener to be detached.
+     */
+    public void removeListener(ParameterChangeListener<T> listener) {
+        listeners.remove(listener);
+    }
+
+    /**
+     * Returns a default value.
+     * @return a default value.
+     */
+    public T getDefault() {
+        return defaultValue;
     }
 }

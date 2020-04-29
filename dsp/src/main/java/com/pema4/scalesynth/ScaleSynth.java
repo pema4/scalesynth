@@ -7,15 +7,29 @@ import com.pema4.scalesynth.dsp.generators.TestSineGenerator;
 import com.pema4.scalesynth.dsp.processors.DecayAmpEnvelope;
 import com.pema4.scalesynth.dsp.processors.Delay;
 
-
 /**
  * Main synthesizer class.
  * It is used to fill buffers with n samples.
  */
 public class ScaleSynth implements Generator {
-    private final Generator generator = new PolyGenerator(8, () ->
-            new TestSineGenerator().then(new DecayAmpEnvelope())).then(new Delay());
-    //private final Generator generator = new TestSineGenerator();
+    private final ScaleSynthParameters parameters = new ScaleSynthParameters();
+    private final Generator generator = new PolyGenerator(8, this::createVoice).then(new Delay());
+
+    private Generator createVoice() {
+        var sineGenerator = new TestSineGenerator();
+        sineGenerator.setOctave(parameters.getOctave().getDefault());
+        parameters.getOctave().addListener(sineGenerator::setOctave);
+
+        var decayAmpEnvelope = new DecayAmpEnvelope();
+        decayAmpEnvelope.setVolume(parameters.getVolume().getDefault());
+        parameters.getVolume().addListener(decayAmpEnvelope::setVolume);
+
+        return sineGenerator.then(decayAmpEnvelope);
+    }
+
+    public ScaleSynthParameters getParameters() {
+        return parameters;
+    }
 
     @Override
     public void generate(float[][] outputs, int n) {

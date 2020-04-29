@@ -5,9 +5,9 @@ import com.pema4.scalesynth.base.KeyboardEventType;
 import com.pema4.scalesynth.base.processors.ProcessorBase;
 
 public class DecayAmpEnvelope extends ProcessorBase {
-
     private float amplitude;
     private float coef;
+    private float velocity;
     private float volume;
 
     /**
@@ -29,7 +29,7 @@ public class DecayAmpEnvelope extends ProcessorBase {
     @Override
     public void onKeyboardEvent(KeyboardEvent keyboardEvent) {
         if (keyboardEvent.getType() == KeyboardEventType.NOTE_ON) {
-            volume = 0.3f + 0.7f * keyboardEvent.getVelocity() / 127.0f;
+            velocity = 0.3f + 0.7f * keyboardEvent.getVelocity() / 127.0f;
             amplitude = 1f;
             coef = 0.9999f;
         } else {
@@ -43,9 +43,13 @@ public class DecayAmpEnvelope extends ProcessorBase {
         for (int ch = 0; ch < inputs.length; ++ch) {
             amplitude = initialAmplitude;
             for (int i = 0; i < inputs[0].length; ++i) {
-                outputs[ch][i] = inputs[ch][i] * volume * amplitude;
+                outputs[ch][i] = inputs[ch][i] * velocity * amplitude * volume;
                 amplitude *= coef;
             }
         }
+    }
+
+    public void setVolume(float volume) {
+        this.volume = volume;
     }
 }
