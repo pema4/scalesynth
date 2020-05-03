@@ -31,48 +31,19 @@ class ChainedGenerator implements Generator {
     }
 
     @Override
-    public final void generate(float[][] channels, int n) {
-        generator.generate(channels, n);
-
-        // buffers used for processors
-        var inputs = new float[channels.length][channels[0].length];
-        var outputs = channels;
+    public final void generate(double[][] outputs, int n) {
+        generator.generate(outputs, n);
 
         for (int i = 0, processorsLength = processors.length; i < processorsLength; i++) {
-            // swap inputs and outputs
-            var temp = inputs;
-            inputs = outputs;
-            outputs = temp;
-
-            processors[i].process(inputs, outputs, n);
+            processors[i].process(outputs, n);
         }
-
-        if (outputs != channels)
-            for (int i = 0; i < channels.length; ++i)
-                System.arraycopy(outputs[i], 0, channels[i], 0, channels[0].length);
     }
 
     @Override
-    public void setSampleRate(float sampleRate) {
+    public void setSampleRate(double sampleRate) {
         generator.setSampleRate(sampleRate);
         for (int i = 0, processorsLength = processors.length; i < processorsLength; i++)
             processors[i].setSampleRate(sampleRate);
-    }
-
-    @Override
-    public float getSampleRate() {
-        return generator.getSampleRate();
-    }
-
-    /**
-     * Reports a latency of this component (in samples)
-     *
-     * @return a latency of this component (in samples)
-     */
-    @Override
-    public float getLatency() {
-        var processorsLatency = Arrays.stream(processors).mapToDouble(Component::getLatency).sum();
-        return generator.getLatency() + (float)processorsLatency;
     }
 
     /**
@@ -82,9 +53,20 @@ class ChainedGenerator implements Generator {
      * @param keyboardEvent represent a type of keyboard event.
      */
     @Override
-    public void onKeyboardEvent(KeyboardEvent keyboardEvent) {
-        generator.onKeyboardEvent(keyboardEvent);
+    public void handleKeyboardEvent(KeyboardEvent keyboardEvent) {
+        generator.handleKeyboardEvent(keyboardEvent);
         for (int i = 0; i < processors.length; ++i)
-            processors[i].onKeyboardEvent(keyboardEvent);
+            processors[i].handleKeyboardEvent(keyboardEvent);
+    }
+
+    /**
+     * Returns true if component is active (does something useful).
+     * This is used mainly to shutdown inactive voices.
+     *
+     * @return true if component is active, otherwise false.
+     */
+    @Override
+    public boolean isActive() {
+        return processors[processors.length - 1].isActive();
     }
 }

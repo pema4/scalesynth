@@ -7,10 +7,10 @@ import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
 import javafx.scene.layout.HBox;
 
-public class FloatParameterSlider extends Parent {
-    private final NumericParameter<Float> parameter;
+public class DoubleParameterSlider extends Parent {
+    private final NumericParameter<Double> parameter;
 
-    public FloatParameterSlider(NumericParameter<Float> parameter) {
+    public DoubleParameterSlider(NumericParameter<Double> parameter) {
         this.parameter = parameter;
         var ui = createUI();
         getChildren().add(ui);
@@ -22,7 +22,7 @@ public class FloatParameterSlider extends Parent {
         var unit = new Label(parameter.getUnit());
 
         var slider = new Slider(parameter.getMin(), parameter.getMax(), parameter.getDefault());
-        slider.valueProperty().addListener((observable, oldValue, newValue) -> parameter.setValue(newValue.floatValue()));
+        slider.valueProperty().addListener((observable, oldValue, newValue) -> parameter.setValue(newValue.doubleValue()));
         parameter.addListener(slider::setValue);
 
         return new HBox(5, name, slider, unit);

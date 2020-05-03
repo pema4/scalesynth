@@ -10,7 +10,8 @@ public class PolyGenerator implements Generator {
     private final int maxPolyphony;
     //private final Parameter<Boolean> retrigger = Parameter.booleanParameter("shouldRetrigger");
     private final Supplier<Generator> voiceSupplier;
-    private final LinkedHashMap<Integer, Generator> noteMapping = new LinkedHashMap<>();
+    private final Map<Integer, Generator> noteMapping = new HashMap<>();
+    private final Map<Generator, Integer> activeVoices = new LinkedHashMap<>();
     private final Set<Generator> freeVoices = new HashSet<>();
     private final Generator[] voices;
 
@@ -27,18 +28,24 @@ public class PolyGenerator implements Generator {
     }
 
     @Override
-    public void generate(float[][] outputs, int n) {
+    public synchronized void generate(double[][] outputs, int n) {
         int channelCount = outputs.length;
 
         for (int ch = 0; ch < channelCount; ++ch)
-            Arrays.fill(outputs[ch], 0f);
+            Arrays.fill(outputs[ch], 0.0);
 
-        float[][] voiceResult = new float[channelCount][n];
-        for (Generator voice : noteMapping.values()) {
+        double[][] voiceResult = new double[channelCount][n];
+        var iterator = activeVoices.keySet().iterator();
+        while (iterator.hasNext()) {
+            var voice = iterator.next();
             voice.generate(voiceResult, n);
             for (int ch = 0; ch < channelCount; ++ch)
                 for (int i = 0; i < n; ++i)
                     outputs[ch][i] += voiceResult[ch][i];
+            if (!voice.isActive()) {
+                iterator.remove();
+                freeVoices.add(voice);
+            }
         }
     }
 
@@ -48,32 +55,10 @@ public class PolyGenerator implements Generator {
      * @param sampleRate new sample rate.
      */
     @Override
-    public void setSampleRate(float sampleRate) {
+    public void setSampleRate(double sampleRate) {
         for (Generator generator : voices)
             generator.setSampleRate(sampleRate);
 
-    }
-
-    /**
-     * Returns a sample rate used in processing.
-     *
-     * @return a sample rate used in processing.
-     */
-    @Override
-    public float getSampleRate() {
-        return voices[0].getSampleRate();
-    }
-
-    /**
-     * Reports a latency of this component (in samples).
-     *
-     * Actually it returns a latency of the first created voice (every voice has the same latency)
-     *
-     * @return a latency of this component (in samples)
-     */
-    @Override
-    public float getLatency() {
-        return voices[0].getLatency();
     }
 
     /**
@@ -86,37 +71,61 @@ public class PolyGenerator implements Generator {
      * @param event represent a type of keyboard event.
      */
     @Override
-    public void onKeyboardEvent(KeyboardEvent event) {
+    public synchronized void handleKeyboardEvent(KeyboardEvent event) {
         int note = event.getNote();
         KeyboardEventType type = event.getType();
 
         switch (type) {
             case NOTE_OFF:
-                if (noteMapping.containsKey(note))
-                    noteMapping.get(note).onKeyboardEvent(event);
+//                if (noteMapping.containsKey(note))
+//                    noteMapping.get(note).handleKeyboardEvent(event);
+                for (var entry : activeVoices.entrySet()) {
+                    if (entry.getValue() == note)
+                        entry.getKey().handleKeyboardEvent(event);
+                }
                 break;
             case NOTE_ON:
+//                if (noteMapping.containsKey(note)) {
+//                    var generator = noteMapping.get(note);
+//                    noteMapping.replace(note, generator);
+//                    generator.handleKeyboardEvent(event);
+//                } else if (freeVoices.size() != 0) {
+//                    var freeVoice = freeVoices.iterator().next();
+//                    freeVoices.remove(freeVoice);
+//                    noteMapping.put(note, freeVoice);
+//                    freeVoice.handleKeyboardEvent(event);
+//                } else {
+//                    //var oldestVoiceEntry = (Map.Entry<Integer, Generator>)arr[0];
+//                    var oldestVoiceEntry = noteMapping.entrySet().iterator().next();
+//                    var oldestNote = oldestVoiceEntry.getKey();
+//                    var oldestGenerator = oldestVoiceEntry.getValue();
+//                    noteMapping.remove(oldestNote);
+//                    noteMapping.put(note, oldestGenerator);
+//                    oldestGenerator.handleKeyboardEvent(event);
+//                }
                 if (freeVoices.size() != 0) {
                     var freeVoice = freeVoices.iterator().next();
                     freeVoices.remove(freeVoice);
-                    noteMapping.put(note, freeVoice);
-                    freeVoice.onKeyboardEvent(event);
-                } else if (noteMapping.containsKey(note)) {
-                    var generator = noteMapping.get(note);
-                    noteMapping.remove(note);
-                    noteMapping.put(note, generator);
-                    generator.onKeyboardEvent(event);
+                    activeVoices.put(freeVoice, note);
+                    freeVoice.handleKeyboardEvent(event);
                 } else {
-                    var arr = noteMapping.entrySet().toArray();
-                    //var oldestVoiceEntry = (Map.Entry<Integer, Generator>)arr[0];
-                    var oldestVoiceEntry = noteMapping.entrySet().iterator().next();
-                    var oldestNote = oldestVoiceEntry.getKey();
-                    var oldestGenerator = oldestVoiceEntry.getValue();
-                    noteMapping.remove(oldestNote);
-                    noteMapping.put(note, oldestGenerator);
-                    oldestGenerator.onKeyboardEvent(event);
+                    var oldestGenerator = activeVoices.keySet().iterator().next();
+                    activeVoices.remove(oldestGenerator);
+                    activeVoices.put(oldestGenerator, note);
+                    oldestGenerator.handleKeyboardEvent(event);
                 }
                 break;
         }
+    }
+
+    /**
+     * Returns true if component is active (does something useful).
+     * This is used mainly to shutdown inactive voices.
+     *
+     * @return true if component is active, otherwise false.
+     */
+    @Override
+    public boolean isActive() {
+        return noteMapping.size() == 0;
     }
 }

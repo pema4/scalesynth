@@ -5,15 +5,15 @@ import com.pema4.scalesynth.base.processors.ProcessorBase;
 
 class DelayLine {
     private static final float MAX_TIME = 1f;
-    private float[] buffer;
+    private double[] buffer;
     private int bufferLength;
     private int writePoint;
     private int readPoint;
-    private float readOffset;
-    private float feedback;
-    private float delay;
+    private double readOffset;
+    private double feedback;
+    private double delay;
 
-    public void setDelay(float delay)
+    public void setDelay(double delay)
     {
         if (this.delay == delay)
             return;
@@ -29,14 +29,14 @@ class DelayLine {
         readOffset = (float)(delayedPoint - readPoint);
     }
 
-    public void setFeedback(float value)
+    public void setFeedback(double value)
     {
         feedback = value;
     }
 
-    public float CalculateOutput()
+    public double CalculateOutput()
     {
-        float res = buffer[readPoint] * (1 - readOffset);
+        double res = buffer[readPoint] * (1 - readOffset);
         var nextPoint = readPoint + 1;
         if (nextPoint < bufferLength)
             res += buffer[nextPoint] * readOffset;
@@ -45,11 +45,11 @@ class DelayLine {
         return res;
     }
 
-    public float processOne(float input)
+    public double processOne(double input)
     {
         buffer[writePoint] = input;
 
-        float delayedSample = CalculateOutput();
+        double delayedSample = CalculateOutput();
         readPoint += 1;
         if (readPoint == bufferLength)
             readPoint = 0;
@@ -62,9 +62,9 @@ class DelayLine {
         return delayedSample;
     }
 
-    public void setSampleRate(float sampleRate) {
+    public void setSampleRate(double sampleRate) {
         bufferLength = (int)(sampleRate * MAX_TIME);
-        buffer = new float[bufferLength];
+        buffer = new double[bufferLength];
     }
 }
 
@@ -81,20 +81,10 @@ public class Delay extends ProcessorBase {
     }
 
     @Override
-    public void process(float[][] inputs, float[][] outputs, int n) {
+    public void process(double[][] inputs, int n) {
         for (int ch = 0; ch < inputs.length; ++ch)
             for (int i = 0; i < n; ++i)
-                outputs[ch][i] = 0.3f * delayLines[ch].processOne(inputs[ch][i]) + 0.7f * inputs[ch][i];
-    }
-
-    /**
-     * Reports a latency of this component (in samples)
-     *
-     * @return a latency of this component (in samples)
-     */
-    @Override
-    public float getLatency() {
-        return 0;
+                inputs[ch][i] = 0.3f * delayLines[ch].processOne(inputs[ch][i]) + 0.7f * inputs[ch][i];
     }
 
     /**
@@ -103,7 +93,7 @@ public class Delay extends ProcessorBase {
      * @param sampleRate new sample rate.
      */
     @Override
-    public void setSampleRate(float sampleRate) {
+    public void setSampleRate(double sampleRate) {
         for (DelayLine delayLine : delayLines) {
             delayLine.setSampleRate(sampleRate);
             delayLine.setDelay(sampleRate / 2);
@@ -117,7 +107,7 @@ public class Delay extends ProcessorBase {
      * @param keyboardEvent represent a type of keyboard event.
      */
     @Override
-    public void onKeyboardEvent(KeyboardEvent keyboardEvent) {
+    public void handleKeyboardEvent(KeyboardEvent keyboardEvent) {
 
     }
 }

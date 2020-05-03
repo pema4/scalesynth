@@ -22,11 +22,19 @@ public class SynthMidiAdapter implements Receiver {
      */
     @Override
     public void send(MidiMessage message, long timeStamp) {
-        System.out.println(message.getMessage()[0] + " " + message.getMessage()[1]);
-        if (message.getStatus() == ShortMessage.NOTE_ON)
-            synth.onKeyboardEvent(KeyboardEvent.noteOn(message.getMessage()[1], message.getMessage()[2]));
-        else if (message.getStatus() == ShortMessage.NOTE_OFF)
-            synth.onKeyboardEvent(KeyboardEvent.noteOff(message.getMessage()[1], message.getMessage()[2]));
+        //System.out.println(message.getMessage()[0] + " " + message.getMessage()[1]);
+        if (message.getStatus() == ShortMessage.NOTE_ON) {
+            int note = message.getMessage()[1];
+            double freq = 440 * (float)Math.pow(2, (note - 69) / 12.0);
+            int velocity = message.getMessage()[2];
+            synth.handleKeyboardEvent(KeyboardEvent.noteOn(note, freq, velocity));
+        }
+        else if (message.getStatus() == ShortMessage.NOTE_OFF) {
+            int note = message.getMessage()[1];
+            double freq = 440 * (float)Math.pow(2, (note - 69) / 12.0);
+            int velocity = message.getMessage()[2];
+            synth.handleKeyboardEvent(KeyboardEvent.noteOff(note, freq, velocity));
+        }
     }
 
     /**

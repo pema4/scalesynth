@@ -15,6 +15,7 @@ public class SynthAsioAdapter implements AsioDriverListener {
     private int sampleIndex;
     private int bufferSize;
     private float[][] outputs;
+    private double[][] doubleOutputs;
 
     public SynthAsioAdapter(ScaleSynth synth) {
         this.synth = synth;
@@ -38,6 +39,7 @@ public class SynthAsioAdapter implements AsioDriverListener {
         bufferSize = driver.getBufferPreferredSize();
         synth.setSampleRate((float)driver.getSampleRate());
         outputs = new float[2][bufferSize];
+        doubleOutputs = new double[2][bufferSize];
         driver.createBuffers(new HashSet<>(Set.of(leftOutput, rightOutput)));
         driver.start();
     }
@@ -131,7 +133,10 @@ public class SynthAsioAdapter implements AsioDriverListener {
      */
     @Override
     public void bufferSwitch(long sampleTime, long samplePosition, Set<AsioChannel> activeChannels) {
-        synth.generate(outputs, bufferSize);
+        synth.generate(doubleOutputs, bufferSize);
+        for (int ch = 0; ch < doubleOutputs.length; ++ch)
+            for (int i = 0; i < doubleOutputs[0].length; ++i)
+                outputs[ch][i] = (float)doubleOutputs[ch][i];
         leftOutput.write(outputs[0]);
         rightOutput.write(outputs[1]);
     }
