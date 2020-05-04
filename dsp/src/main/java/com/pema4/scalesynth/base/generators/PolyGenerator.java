@@ -31,8 +31,8 @@ public class PolyGenerator implements Generator {
     public synchronized void generate(double[][] outputs, int n) {
         int channelCount = outputs.length;
 
-        for (int ch = 0; ch < channelCount; ++ch)
-            Arrays.fill(outputs[ch], 0.0);
+        for (double[] output : outputs)
+            Arrays.fill(output, 0.0);
 
         double[][] voiceResult = new double[channelCount][n];
         var iterator = activeVoices.keySet().iterator();
@@ -77,32 +77,12 @@ public class PolyGenerator implements Generator {
 
         switch (type) {
             case NOTE_OFF:
-//                if (noteMapping.containsKey(note))
-//                    noteMapping.get(note).handleKeyboardEvent(event);
                 for (var entry : activeVoices.entrySet()) {
                     if (entry.getValue() == note)
                         entry.getKey().handleKeyboardEvent(event);
                 }
                 break;
             case NOTE_ON:
-//                if (noteMapping.containsKey(note)) {
-//                    var generator = noteMapping.get(note);
-//                    noteMapping.replace(note, generator);
-//                    generator.handleKeyboardEvent(event);
-//                } else if (freeVoices.size() != 0) {
-//                    var freeVoice = freeVoices.iterator().next();
-//                    freeVoices.remove(freeVoice);
-//                    noteMapping.put(note, freeVoice);
-//                    freeVoice.handleKeyboardEvent(event);
-//                } else {
-//                    //var oldestVoiceEntry = (Map.Entry<Integer, Generator>)arr[0];
-//                    var oldestVoiceEntry = noteMapping.entrySet().iterator().next();
-//                    var oldestNote = oldestVoiceEntry.getKey();
-//                    var oldestGenerator = oldestVoiceEntry.getValue();
-//                    noteMapping.remove(oldestNote);
-//                    noteMapping.put(note, oldestGenerator);
-//                    oldestGenerator.handleKeyboardEvent(event);
-//                }
                 if (freeVoices.size() != 0) {
                     var freeVoice = freeVoices.iterator().next();
                     freeVoices.remove(freeVoice);
@@ -114,6 +94,10 @@ public class PolyGenerator implements Generator {
                     activeVoices.put(oldestGenerator, note);
                     oldestGenerator.handleKeyboardEvent(event);
                 }
+                break;
+            case PITCH_BEND:
+                for (var voice : voices)
+                    voice.handleKeyboardEvent(event);
                 break;
         }
     }

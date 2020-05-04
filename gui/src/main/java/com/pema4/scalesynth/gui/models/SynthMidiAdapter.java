@@ -25,7 +25,6 @@ public class SynthMidiAdapter implements Receiver {
      */
     @Override
     public void send(MidiMessage message, long timeStamp) {
-        //System.out.println(message.getMessage()[0] + " " + message.getMessage()[1]);
         if (message.getStatus() == ShortMessage.NOTE_ON) {
             int note = message.getMessage()[1];
             double freq = scaleService.getFreq(note);
@@ -34,9 +33,11 @@ public class SynthMidiAdapter implements Receiver {
         }
         else if (message.getStatus() == ShortMessage.NOTE_OFF) {
             int note = message.getMessage()[1];
-            double freq = scaleService.getFreq(note);
-            int velocity = message.getMessage()[2];
-            synth.handleKeyboardEvent(KeyboardEvent.noteOff(note, freq, velocity));
+            synth.handleKeyboardEvent(KeyboardEvent.noteOff(note));
+        } else if (message.getStatus() == ShortMessage.PITCH_BEND) {
+            var lsb = message.getMessage()[1];
+            var msb = message.getMessage()[2];
+            synth.handleKeyboardEvent(KeyboardEvent.pitchBend(lsb, msb));
         }
     }
 
