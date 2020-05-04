@@ -92,7 +92,7 @@ public class ScaleSynthParameters {
             new NumericParameter<>("filterQ", 0.71, 0.71, 6.0, "%");
 
     public final NumericParameter<Double> filterMode =
-            new NumericParameter<>("filterMode", 0.0, 0.0, 400.0, "%");
+            new NumericParameter<>("filterMode", 0.0, 0.0, 360.0, "degree");
 
     public final NumericParameter<Double> filterKeyboardTracking =
             new NumericParameter<>("filterKeyboardTracking", 0.0, 0.0, 1.0, "%");
