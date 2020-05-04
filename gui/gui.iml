@@ -14,5 +14,6 @@
     <orderEntry type="library" name="JAsioHost" level="project" />
     <orderEntry type="library" name="javafx" level="project" />
     <orderEntry type="module" module-name="dsp" />
+    <orderEntry type="module" module-name="parser" />
   </component>
 </module>
