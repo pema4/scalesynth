@@ -1,4 +1,4 @@
-package com.pema4.scalesynth.gui;
+package com.pema4.scalesynth.gui.models;
 
 import com.pema4.scalesynth.ScaleSynth;
 import com.synthbot.jasiohost.*;

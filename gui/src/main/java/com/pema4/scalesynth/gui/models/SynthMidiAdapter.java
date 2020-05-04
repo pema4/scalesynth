@@ -1,15 +1,18 @@
-package com.pema4.scalesynth.gui;
+package com.pema4.scalesynth.gui.models;
 
 import com.pema4.scalesynth.ScaleSynth;
 import com.pema4.scalesynth.base.KeyboardEvent;
+import com.pema4.scalesynth.gui.services.ScaleService;
 
 import javax.sound.midi.*;
 
 public class SynthMidiAdapter implements Receiver {
     private final ScaleSynth synth;
+    private final ScaleService scaleService;
 
-    public SynthMidiAdapter(ScaleSynth synth) {
+    public SynthMidiAdapter(ScaleSynth synth, ScaleService scaleService) {
         this.synth = synth;
+        this.scaleService = scaleService;
     }
 
     /**
@@ -25,13 +28,13 @@ public class SynthMidiAdapter implements Receiver {
         //System.out.println(message.getMessage()[0] + " " + message.getMessage()[1]);
         if (message.getStatus() == ShortMessage.NOTE_ON) {
             int note = message.getMessage()[1];
-            double freq = 440 * (float)Math.pow(2, (note - 69) / 12.0);
+            double freq = scaleService.getFreq(note);
             int velocity = message.getMessage()[2];
             synth.handleKeyboardEvent(KeyboardEvent.noteOn(note, freq, velocity));
         }
         else if (message.getStatus() == ShortMessage.NOTE_OFF) {
             int note = message.getMessage()[1];
-            double freq = 440 * (float)Math.pow(2, (note - 69) / 12.0);
+            double freq = scaleService.getFreq(note);
             int velocity = message.getMessage()[2];
             synth.handleKeyboardEvent(KeyboardEvent.noteOff(note, freq, velocity));
         }

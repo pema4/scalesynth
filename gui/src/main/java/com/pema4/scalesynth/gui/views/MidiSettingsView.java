@@ -1,6 +1,6 @@
 package com.pema4.scalesynth.gui.views;
 
-import com.pema4.scalesynth.gui.SynthMidiAdapter;
+import com.pema4.scalesynth.gui.models.SynthMidiAdapter;
 import com.pema4.scalesynth.gui.services.MidiService;
 import javafx.collections.ObservableList;
 import javafx.geometry.Pos;

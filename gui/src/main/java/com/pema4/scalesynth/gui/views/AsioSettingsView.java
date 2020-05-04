@@ -1,6 +1,6 @@
 package com.pema4.scalesynth.gui.views;
 
-import com.pema4.scalesynth.gui.SynthAsioAdapter;
+import com.pema4.scalesynth.gui.models.SynthAsioAdapter;
 import com.synthbot.jasiohost.AsioDriver;
 import com.synthbot.jasiohost.AsioException;
 import javafx.collections.ObservableList;

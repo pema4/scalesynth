@@ -1,5 +1,6 @@
-package com.pema4.scalesynth.gui;
+package com.pema4.scalesynth.gui.models;
 
+import com.pema4.scalesynth.gui.models.SynthMidiAdapter;
 import com.pema4.scalesynth.gui.services.ScaleService;
 import javafx.event.EventHandler;
 import javafx.scene.input.KeyEvent;
