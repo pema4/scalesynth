@@ -11,6 +11,7 @@ public class SvfFilter implements Processor {
     private double cutoff = 44100;
     private double keyboardTracking;
     private double oscFreq;
+    private double pitchBendCoef = 1;
 
     /**
      * Constructs a new SvfFilter based on Andrew Simpler implementation.
@@ -82,7 +83,7 @@ public class SvfFilter implements Processor {
             var filter = filters[ch];
             for (int i = 0; i < n; ++i) {
                 var envelopeModulation = Math.pow(2, modulation[i] * envelopeAmount);
-                var kbModulation = (1 - keyboardTracking) + keyboardTracking * oscFreq / 440;
+                var kbModulation = (1 - keyboardTracking) + keyboardTracking / 440 * oscFreq * pitchBendCoef;
                 filter.setCutoff(cutoff * envelopeModulation * kbModulation);
                 inputs[ch][i] = filters[ch].processOne(inputs[ch][i]);
             }
@@ -109,10 +110,15 @@ public class SvfFilter implements Processor {
      */
     @Override
     public void handleKeyboardEvent(KeyboardEvent event) {
-        filterEnvelope.handleKeyboardEvent(event);
-        this.oscFreq = event.getFreq();
+        switch (event.getType()) {
+            case NOTE_ON:
+                filterEnvelope.handleKeyboardEvent(event);
+                this.oscFreq = event.getFreq();
+                break;
+            case PITCH_BEND:
+                pitchBendCoef = event.getFreq();
+        }
     }
-
 
     public void setKeyboardTracking(double keyboardTracking) {
         this.keyboardTracking = keyboardTracking;

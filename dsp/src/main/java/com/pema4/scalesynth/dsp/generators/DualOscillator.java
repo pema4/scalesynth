@@ -47,6 +47,7 @@ public class DualOscillator implements Generator {
     private double driftCoef;
     private double baseFreq;
     private double sampleRate;
+    private double pitchBendCoef = 1;
 
     /**
      * Sets the master oscillator pulse pulse width.
@@ -303,7 +304,7 @@ public class DualOscillator implements Generator {
 
             // fill buffers with some noise.
             for (int i = 0; i < n; ++i)
-                tempBuffer[i] = noiseAmplitude * (2 * Math.random() - 1);
+                tempBuffer[i] = noiseAmplitude / unisonVoices * (2 * Math.random() - 1);
 
             // render master and slave parts on top of the noise.
             masters[voice].generate(tempBuffer, n);
@@ -348,8 +349,9 @@ public class DualOscillator implements Generator {
                 driftCoef = Math.pow(2, (Math.random() * 2 - 1) * drift / 48);
                 updateFrequencies();
                 break;
-            case MODULATION:
-                // to implement
+            case PITCH_BEND:
+                pitchBendCoef = event.getFreq();
+                updateFrequencies();
                 break;
         }
     }
@@ -358,8 +360,8 @@ public class DualOscillator implements Generator {
      * Updates frequencies of oscillator based on current oscillator state.
      */
     private void updateFrequencies() {
-        var masterFreq = baseFreq * driftCoef;
-        var slaveFreq = baseFreq * driftCoef * Math.pow(2, slaveOctave + slaveSemi / 12 + slaveFine / 1200);
+        var masterFreq = baseFreq * driftCoef * pitchBendCoef;
+        var slaveFreq = baseFreq * driftCoef * Math.pow(2, slaveOctave + slaveSemi / 12 + slaveFine / 1200) * pitchBendCoef;
 
         for (int i = 0; i < unisonVoices; ++i) {
             // how much i'th voice is distanced from the center (from -0.5 to 0.5 in semitones).
