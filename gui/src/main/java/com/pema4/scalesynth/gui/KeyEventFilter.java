@@ -1,5 +1,6 @@
 package com.pema4.scalesynth.gui;
 
+import com.pema4.scalesynth.gui.services.ScaleService;
 import javafx.event.EventHandler;
 import javafx.scene.input.KeyEvent;
 
@@ -12,11 +13,13 @@ public class KeyEventFilter implements EventHandler<KeyEvent> {
     private static final String KEYS_ORDER = "AWSEDFTGYHUJKOLP;']";
     private final Set<Integer> pressedNotes = new HashSet<>();
     private final SynthMidiAdapter midiAdapter;
+    private final ScaleService scaleService;
     private int currentVelocity = 80;
     private int currentOctave = 4;
 
-    public KeyEventFilter(SynthMidiAdapter midiAdapter) {
+    public KeyEventFilter(SynthMidiAdapter midiAdapter, ScaleService scaleService) {
         this.midiAdapter = midiAdapter;
+        this.scaleService = scaleService;
     }
 
     /**
