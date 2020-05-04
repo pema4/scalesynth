@@ -69,7 +69,7 @@ public class SvfFilter implements Processor {
     }
 
     /**
-     * Performs replace processing of new audio.
+     * Performs the replace processing of incoming audio.
      *
      * @param inputs input audio to be replaced (multiple channels)
      * @param n      how many samples needs processing.

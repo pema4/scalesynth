@@ -46,6 +46,14 @@ public class ScaleSynthParameters {
     public final NumericParameter<Double> noiseAmplitude =
             new NumericParameter<>("noiseAmplitude", 0.0, 0.0, 1.0, "");
 
+    public final NumericParameter<Double> unisonDetune =
+            new NumericParameter<>("unisonDetune", 0.1, 0.0, 1.0, "%");
+
+    public final NumericParameter<Double> unisonStereo =
+            new NumericParameter<>("unisonStereo", 0.1, 0.0, 1.0, "%");
+
+    public final NumericParameter<Integer> unisonVoices =
+            new NumericParameter<>("unisonVoices", 3, 1, 8, "%");
 
     // amp eg
 
@@ -96,5 +104,4 @@ public class ScaleSynthParameters {
 
     public final NumericParameter<Double> filterKeyboardTracking =
             new NumericParameter<>("filterKeyboardTracking", 0.0, 0.0, 1.0, "%");
-
 }

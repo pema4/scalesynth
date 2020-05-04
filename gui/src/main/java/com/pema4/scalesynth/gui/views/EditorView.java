@@ -26,6 +26,9 @@ public class EditorView extends Parent {
         var slaveMix = new DoubleParameterSlider(parameters.slaveMix);
         var masterPW = new DoubleParameterSlider(parameters.masterPW);
         var slavePW = new DoubleParameterSlider(parameters.slavePW);
+        var unisonDetune = new DoubleParameterSlider(parameters.unisonDetune);
+        var unisonStereo = new DoubleParameterSlider(parameters.unisonStereo);
+        var unisonVoices = new IntegerParameterSlider(parameters.unisonVoices);
 
         var ampEgAttackRate = new DoubleParameterSlider(parameters.ampEgAttackRate);
         var ampEgDecayRate = new DoubleParameterSlider(parameters.ampEgDecayRate);
@@ -57,6 +60,9 @@ public class EditorView extends Parent {
                 slaveMix,
                 masterPW,
                 slavePW,
+                unisonDetune,
+                unisonStereo,
+                unisonVoices,
                 ampAmplitude,
                 ampEgAttackRate,
                 ampEgDecayRate,
