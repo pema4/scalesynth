@@ -49,8 +49,8 @@ public class ScaleSynth implements Generator {
         osc.setDrift(parameters.drift.getDefault());
         parameters.drift.addListener(osc::setDrift);
 
-        osc.setIfSynced(parameters.ifSynced.getDefault());
-        parameters.ifSynced.addListener(osc::setIfSynced);
+        osc.setSyncEnabled(parameters.ifSynced.getDefault());
+        parameters.ifSynced.addListener(osc::setSyncEnabled);
 
         osc.setMasterMix(parameters.masterMix.getDefault());
         parameters.masterMix.addListener(osc::setMasterMix);
@@ -73,6 +73,15 @@ public class ScaleSynth implements Generator {
         osc.setNoiseAmplitude(parameters.noiseAmplitude.getDefault());
         parameters.noiseAmplitude.addListener(osc::setNoiseAmplitude);
 
+        osc.setUnisonVoices(parameters.unisonVoices.getDefault());
+        parameters.unisonVoices.addListener(osc::setUnisonVoices);
+        
+        osc.setUnisonDetune(parameters.unisonDetune.getDefault());
+        parameters.unisonDetune.addListener(osc::setUnisonDetune);
+
+        osc.setUnisonStereo(parameters.unisonStereo.getDefault());
+        parameters.unisonStereo.addListener(osc::setUnisonStereo);
+        
         return osc;
     }
 

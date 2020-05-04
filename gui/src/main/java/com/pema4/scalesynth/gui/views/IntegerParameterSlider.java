@@ -8,10 +8,10 @@ import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
 import javafx.scene.layout.HBox;
 
-public class DoubleParameterSlider extends Parent {
-    protected final NumericParameter<Double> parameter;
+public class IntegerParameterSlider extends Parent {
+    protected final NumericParameter<Integer> parameter;
 
-    public DoubleParameterSlider(NumericParameter<Double> parameter) {
+    public IntegerParameterSlider(NumericParameter<Integer> parameter) {
         this.parameter = parameter;
         var ui = createUI();
         getChildren().add(ui);
@@ -19,7 +19,6 @@ public class DoubleParameterSlider extends Parent {
 
     private Node createUI() {
         var name = new Label(parameter.getName());
-
         var unit = new Label(parameter.getUnit());
 
         var slider = new Slider(parameter.getMin(), parameter.getMax(), parameter.getDefault());
@@ -30,6 +29,6 @@ public class DoubleParameterSlider extends Parent {
     }
 
     private void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
-        parameter.setValue(newValue.doubleValue());
+        parameter.setValue(newValue.intValue());
     }
 }
