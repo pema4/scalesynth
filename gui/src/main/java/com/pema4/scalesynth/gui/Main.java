@@ -6,6 +6,7 @@ import com.pema4.scalesynth.gui.models.SynthAsioAdapter;
 import com.pema4.scalesynth.gui.models.SynthMidiAdapter;
 import com.pema4.scalesynth.gui.services.ScaleService;
 import com.pema4.scalesynth.gui.services.MidiService;
+import com.pema4.scalesynth.gui.services.SynthSerializationService;
 import com.pema4.scalesynth.gui.views.*;
 import javafx.application.Application;
 import javafx.scene.Parent;
@@ -20,6 +21,7 @@ public class Main extends Application {
     private final ScaleService scaleService = new ScaleService();
     private final SynthMidiAdapter midiAdapter = new SynthMidiAdapter(synth, scaleService);
     private final SynthAsioAdapter asioAdapter = new SynthAsioAdapter(synth);
+    private final SynthSerializationService serializationService = new SynthSerializationService(synth.getParameters());
 
     public static void main(String[] args) {
         System.setProperty("java.library.path", "C:\\javalibs\\jasiohost\\lib");
@@ -40,7 +42,8 @@ public class Main extends Application {
         var settings = new VBox(5,
                 new MidiSettingsView(midiAdapter, new MidiService()),
                 new AsioSettingsView(asioAdapter),
-                new ScaleSettingsView(scaleService)
+                new ScaleSettingsView(scaleService),
+                new SynthSerializationView(serializationService)
         );
         pane.setRight(settings);
         pane.setCenter(new EditorView(synth.getParameters()));
