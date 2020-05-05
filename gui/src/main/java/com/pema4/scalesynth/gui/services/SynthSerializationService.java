@@ -7,6 +7,7 @@ import java.beans.XMLDecoder;
 import java.beans.XMLEncoder;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.lang.reflect.ParameterizedType;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -46,8 +47,20 @@ public class SynthSerializationService {
             field.setAccessible(true);
             if (Parameter.class.isAssignableFrom(field.getType())) {
                 var parameter = field.get(parameters);
+                var value = state.get(field.getName());
+                if (value == null) {
+                    var valueType = field.getGenericType();
+                    if (valueType instanceof ParameterizedType) {
+                        var actualType = ((ParameterizedType) valueType).getActualTypeArguments()[0];
+                        if (actualType instanceof Class) {
+                            var actualClass = ((Class<?>) actualType);
+                            var stringConstructor = actualClass.getConstructor(String.class);
+                            value = stringConstructor.newInstance("0");
+                        }
+                    }
+                }
                 var method = field.getType().getMethod("setValue", Object.class);
-                method.invoke(parameter, state.get(field.getName()));
+                method.invoke(parameter, value);
             }
         }
     }
