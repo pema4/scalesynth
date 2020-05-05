@@ -84,7 +84,7 @@ public class Knob<T extends Number> extends Parent implements ParameterChangeLis
     private void mousePressed(MouseEvent event) {
         // remember knob position before drag
         this.startPos = currentPos;
-        this.startY = event.getY();
+        this.startY = event.getSceneY();
     }
 
     private void mouseReleased(MouseEvent event) {
@@ -96,7 +96,7 @@ public class Knob<T extends Number> extends Parent implements ParameterChangeLis
         var posDelta = yDelta / MOVEMENT_LENGTH; // position delta
         var newPos = startPos - posDelta; // negative delta means greater value.
         newPos = Math.max(0, Math.min(newPos, 1)); // fit in range [0; 1]
-        updatePosition(newPos);
+        currentPos = newPos;
         updateParameter(transform.toParameter(currentPos));
     }
 
