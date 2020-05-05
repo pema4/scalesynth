@@ -1,9 +1,12 @@
 package com.pema4.scalesynth.gui.views;
 
 import com.pema4.scalesynth.ScaleSynthParameters;
+import javafx.geometry.HPos;
+import javafx.geometry.VPos;
 import javafx.scene.Node;
 import javafx.scene.Parent;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.FlowPane;
+import javafx.scene.layout.TilePane;
 
 public class EditorView extends Parent {
     private final ScaleSynthParameters parameters;
@@ -15,6 +18,7 @@ public class EditorView extends Parent {
     }
 
     private Node createUI() {
+        /*
         var masterAmplitude = new DoubleParameterSlider(parameters.masterAmplitude);
         var slaveAmplitude = new DoubleParameterSlider(parameters.slaveAmplitude);
         var noiseAmplitude = new DoubleParameterSlider(parameters.noiseAmplitude);
@@ -78,5 +82,19 @@ public class EditorView extends Parent {
                 filterMode,
                 filterKeyboardTracking
         );
+         */
+
+        var master = new MasterOscillatorEditorView(parameters);
+        var slave = new SlaveOscillatorEditorView(parameters);
+        var unison = new UnisonEditorView(parameters);
+        var mixer = new MixerEditorView(parameters);
+        var filter = new FilterEditorView(parameters);
+        var filterEg = new FilterEgEditorView(parameters);
+        var ampEg = new AmpEgEditorView(parameters);
+
+        var pane = new FlowPane(10, 10, master, slave, unison, mixer, filter, ampEg, filterEg);
+        pane.setRowValignment(VPos.TOP);
+        pane.setColumnHalignment(HPos.LEFT);
+        return pane;
     }
 }

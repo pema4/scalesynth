@@ -7,6 +7,7 @@ import javafx.scene.Parent;
 import javafx.scene.control.Label;
 import javafx.scene.control.Tooltip;
 import javafx.scene.effect.DropShadow;
+import javafx.scene.effect.InnerShadow;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
@@ -30,7 +31,8 @@ public class Knob<T extends Number> extends Parent implements ParameterChangeLis
     private double startY;
 
     public Knob(NumericParameter<T> parameter, ParameterTransform<T> transform, Color accentColor) {
-        var name = parameter.getName();
+        this.parameter = parameter;
+        this.transform = transform;
         this.accentColor = accentColor;
 
         knob = createKnob();
@@ -39,16 +41,15 @@ public class Knob<T extends Number> extends Parent implements ParameterChangeLis
         var clipRectangle = new Rectangle(42, 42);
         clipPane.setClip(clipRectangle);
 
-        var label = new Label(name);
-        var vbox = new VBox(5, clipPane, label);
-        vbox.setAlignment(Pos.TOP_CENTER);
-
-        var tooltip = new Tooltip(String.format("Knob %s", name));
+        var tooltip = new Tooltip(String.format("Knob %s", parameter.getName()));
         Tooltip.install(knob, tooltip);
 
+        var label = new Label(parameter.getName());
+        var vbox = new VBox(5, clipPane, label);
+        vbox.setAlignment(Pos.TOP_CENTER);
+        vbox.setFillWidth(false);
         getChildren().add(vbox);
-        this.transform = transform;
-        this.parameter = parameter;
+
         parameter.addListener(this);
         parameter.setValue(parameter.getDefault());
     }
@@ -65,7 +66,7 @@ public class Knob<T extends Number> extends Parent implements ParameterChangeLis
         body.setEffect(bodyShadow);
 
         var indicator = new Circle(3, accentColor);
-        var indicatorGlow = new DropShadow(4, accentColor.deriveColor(0, 0, 0, 0.4));
+        var indicatorGlow = new InnerShadow(4, accentColor.deriveColor(0, 1, 0.5, 0.4));
         indicator.setEffect(indicatorGlow);
 
         var knob = new Pane(body, indicator);

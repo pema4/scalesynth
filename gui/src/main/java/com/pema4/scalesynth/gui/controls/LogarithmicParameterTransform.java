@@ -18,7 +18,7 @@ public class LogarithmicParameterTransform implements ParameterTransform<Double>
     @Override
     public double toPosition(Double parameter) {
         if (min == 0)
-            return Math.log(parameter / 1e-20) / Math.log(max / 1e-20);
+            return Math.log(parameter / 1e-3) / Math.log(max / 1e-3);
 
         return Math.log(parameter / min) / Math.log(max / min);
     }
@@ -26,7 +26,7 @@ public class LogarithmicParameterTransform implements ParameterTransform<Double>
     @Override
     public Double toParameter(double position) {
         if (min == 0)
-            return min * Math.exp(position * Math.log(max / 1e-20));
+            return 1e-3 * Math.exp(position * Math.log(max / 1e-3));
 
         return min * Math.exp(position * Math.log(max / min));
     }
