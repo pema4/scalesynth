@@ -54,8 +54,8 @@ public class Main extends Application {
                 new Label("  Audio outputs:"),
                 new AsioSettingsView(asioAdapter)
         );
-        settings.setAlignment(Pos.CENTER_LEFT);
-        settings.setPadding(new Insets(10));
+        settings.setStyle("-fx-alignment: center-left; -fx-background-color: #e6e0dc; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.01), 4, 0.2, 0, 8)");
+        settings.setPadding(new Insets(5));
         pane.setTop(settings);
 
         var editor = new EditorView(synth.getParameters());

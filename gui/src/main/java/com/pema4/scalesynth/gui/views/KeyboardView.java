@@ -41,7 +41,7 @@ public class KeyboardView extends Parent {
             var note = createKey(START_NOTE + i);
             keyboard.getChildren().add(note);
         }
-        keyboard.setStyle("-fx-border-color: black; -fx-border-radius: 8px; -fx-border-width: 2px;");
+        keyboard.setStyle("-fx-border-color: black; -fx-border-radius: 8px; -fx-border-width: 2px; -fx-border-insets: 8 8 8 8");
 
         return keyboard;
     }
