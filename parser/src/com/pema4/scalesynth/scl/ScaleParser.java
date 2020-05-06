@@ -6,6 +6,11 @@ import java.util.List;
 import java.util.Scanner;
 import java.util.regex.Pattern;
 
+/**
+ * Represent a parser for .scl (Scala) tuning files
+ *
+ * This format is an easy way to define custom tuning.
+ */
 public class ScaleParser {
     private enum State {
         DESCRIPTION,
@@ -13,8 +18,18 @@ public class ScaleParser {
         PITCHES
     }
 
+    /**
+     * Regex used to parse a ratio.
+     */
     private static final Pattern PITCH_PATTERN = Pattern.compile("\\s*(\\d+)\\s*([./]?)\\s*(\\d*).*");
 
+    /**
+     * Parses .scl file stored in InputStream.
+     * This parser works line finite state machine.
+     *
+     * @param input input stream with .scl format text.
+     * @return an instance of ParseResult with parsed information.
+     */
     public ParseResult parse(InputStream input) {
         var scanner = new Scanner(input);
         var state = State.DESCRIPTION;
@@ -78,14 +93,5 @@ public class ScaleParser {
         }
 
         return new ParseResult(description, pitches);
-    }
-
-    public static void main(String[] args) throws IOException {
-        var parser = new ScaleParser();
-        System.out.println("Current working directory: " + System.getProperty("user.dir"));
-        try (var file = new FileInputStream("test.scl")) {
-            var result = parser.parse(file);
-            System.out.println(result);
-        }
     }
 }
