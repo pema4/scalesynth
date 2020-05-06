@@ -41,7 +41,8 @@ public class KeyboardView extends Parent {
             var note = createKey(START_NOTE + i);
             keyboard.getChildren().add(note);
         }
-        keyboard.setStyle("-fx-border-color: black; -fx-border-radius: 8px; -fx-border-width: 2px; -fx-border-insets: 8 8 8 8");
+        keyboard.setStyle("-fx-border-color: black; -fx-border-radius: 1px; -fx-border-width: 2px; -fx-border-insets: 8 8 8 8;" +
+                "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.01), 4, 0.2, 0, 8);");
 
         return keyboard;
     }
@@ -108,7 +109,7 @@ public class KeyboardView extends Parent {
 
     private Node createFirstWhiteKey() {
         Rectangle key = new Rectangle(KEY_WIDTH, KEY_HEIGHT);
-        key.setStyle("-fx-fill: lightgray; -fx-stroke: linear-gradient(gray, darkgray); -fx-stroke-type: inside; -fx-stroke-width: 2px;");
+        key.setStyle("-fx-fill: lightgray; -fx-stroke: linear-gradient(lightgray, darkgray); -fx-stroke-type: inside; -fx-stroke-width: 2px;");
         key.setViewOrder(-100);
         return key;
     }

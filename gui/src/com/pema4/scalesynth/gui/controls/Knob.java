@@ -38,7 +38,9 @@ public class Knob<T extends Number> extends Parent implements ParameterChangeLis
         knob = createKnob();
         var clipPane = new StackPane(knob);
         clipPane.setAlignment(Pos.CENTER);
-        var clipRectangle = new Rectangle(62, 62);
+        var clipRectangle = new Rectangle();
+        clipRectangle.widthProperty().bind(knob.widthProperty());
+        clipRectangle.heightProperty().bind(knob.heightProperty());
         clipPane.setClip(clipRectangle);
 
         var tooltip = new Tooltip(String.format("Knob %s", parameter.getName()));
@@ -55,7 +57,7 @@ public class Knob<T extends Number> extends Parent implements ParameterChangeLis
     }
 
     private Pane createKnob() {
-        var body = new Circle(30, Color.valueOf("#dfd8d8"));
+        var body = new Circle(25, Color.valueOf("#dfd8d8"));
         var bodyStroke = new LinearGradient(0, 0, 1, 1, true, CycleMethod.NO_CYCLE,
                 new Stop(0, Color.valueOf("#FFFFFF")),
                 new Stop(0.25, Color.valueOf("#4f4f4f")));
@@ -70,9 +72,9 @@ public class Knob<T extends Number> extends Parent implements ParameterChangeLis
         indicator.setEffect(indicatorGlow);
 
         var knob = new Pane(body, indicator);
-        body.setCenterX(31);
-        body.setCenterY(31);
-        indicator.setCenterX(31);
+        body.setCenterX(26);
+        body.setCenterY(26);
+        indicator.setCenterX(26);
         indicator.setCenterY(9);
 
         knob.setOnMouseDragged(this::mouseDragged);
