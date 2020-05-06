@@ -34,7 +34,8 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) {
         Parent root = createUI();
-        primaryStage.setTitle("Hello World");
+        primaryStage.setTitle("ScaleSynth");
+        primaryStage.setResizable(false);
         primaryStage.setScene(new Scene(root));
         primaryStage.show();
     }
@@ -44,18 +45,23 @@ public class Main extends Application {
 
         pane.addEventFilter(KeyEvent.ANY, new KeyEventFilter(midiAdapter, scaleService));
 
-        var settings = new HBox(5,
-                new Label("  Settings:"),
-                new SynthSerializationView(serializationService),
-                new Label("  Scale:"),
-                new ScaleSettingsView(scaleService),
-                new Label("  Midi inputs:"),
-                new MidiSettingsView(midiAdapter, new MidiService()),
-                new Label("  Audio outputs:"),
-                new AsioSettingsView(asioAdapter)
-        );
-        settings.setStyle("-fx-alignment: center-left; -fx-background-color: #e6e0dc; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.01), 4, 0.2, 0, 8)");
+        var settings = new HBox(15,
+                new HBox(5,
+                        new Label("  Settings:"),
+                        new SynthSerializationView(serializationService)),
+                new HBox(5,
+                        new Label("  Scale:"),
+                        new ScaleSettingsView(scaleService)),
+                new HBox(5,
+                        new Label("  Midi inputs:"),
+                        new MidiSettingsView(midiAdapter, new MidiService())),
+                new HBox(5,
+                        new Label("  Audio outputs:"),
+                        new AsioSettingsView(asioAdapter)));
+        settings.setStyle("-fx-background-color: #e6e0dc; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.01), 4, 0.2, 0, 8)");
         settings.setPadding(new Insets(5));
+        for (var child : settings.getChildren())
+            ((HBox) child).setAlignment(Pos.CENTER);
         pane.setTop(settings);
 
         var editor = new EditorView(synth.getParameters());

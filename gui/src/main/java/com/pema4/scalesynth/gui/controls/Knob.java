@@ -86,6 +86,8 @@ public class Knob<T extends Number> extends Parent implements ParameterChangeLis
         // remember knob position before drag
         this.startPos = currentPos;
         this.startY = event.getSceneY();
+        if (event.getClickCount() > 1 || event.isControlDown())
+            parameter.setValue(parameter.getDefault());
     }
 
     private void mouseReleased(MouseEvent event) {

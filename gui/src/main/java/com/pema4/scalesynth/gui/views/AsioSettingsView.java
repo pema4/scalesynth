@@ -22,8 +22,8 @@ public class AsioSettingsView extends Parent {
         comboBox.getSelectionModel().selectedItemProperty().addListener(this::handleSelectionChanged);
         updateComboBoxItems();
         comboBox.getSelectionModel().selectFirst();
-        comboBox.setMaxWidth(200);
-        comboBox.setMinWidth(200);
+        comboBox.setMaxWidth(150);
+        comboBox.setMinWidth(150);
 
         getChildren().add(comboBox);
     }
