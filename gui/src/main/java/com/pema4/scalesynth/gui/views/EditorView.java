@@ -6,7 +6,11 @@ import javafx.geometry.VPos;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.layout.FlowPane;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.RowConstraints;
 import javafx.scene.layout.TilePane;
+
+import java.awt.*;
 
 public class EditorView extends Parent {
     private final ScaleSynthParameters parameters;
@@ -92,9 +96,22 @@ public class EditorView extends Parent {
         var filterEg = new FilterEgEditorView(parameters);
         var ampEg = new AmpEgEditorView(parameters);
 
-        var pane = new FlowPane(10, 10, master, slave, unison, mixer, filter, ampEg, filterEg);
-        pane.setRowValignment(VPos.TOP);
-        pane.setColumnHalignment(HPos.LEFT);
+        var pane = new GridPane();
+        pane.setStyle("-fx-vgap: 5px; -fx-hgap: 5px; -fx-padding: 5px;");
+        var row0 = new RowConstraints();
+        var row1 = new RowConstraints();
+        row0.setValignment(VPos.TOP);
+        row1.setValignment(VPos.TOP);
+        pane.getRowConstraints().addAll(row0, row1);
+        pane.add(master, 0, 0);
+        pane.add(slave, 0, 1);
+        pane.add(unison, 1, 0, 1, 2);
+        pane.add(mixer, 2, 0, 1, 2);
+        pane.add(filter, 3, 0, 1, 2);
+        pane.add(ampEg, 4, 0);
+        pane.add(filterEg, 4, 1);
+
+
         return pane;
     }
 }
