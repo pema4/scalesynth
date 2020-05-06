@@ -24,6 +24,7 @@ public class ScaleSettingsView extends Parent {
             this.scaleService.disable();
             resetButton.setDisable(true);
         });
+        resetButton.setDisable(true);
 
         Button openButton = new Button("Open scale...");
         openButton.setOnAction(this::readScale);
