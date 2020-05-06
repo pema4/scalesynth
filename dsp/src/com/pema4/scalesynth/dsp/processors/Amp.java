@@ -2,21 +2,43 @@ package com.pema4.scalesynth.dsp.processors;
 
 import com.pema4.scalesynth.base.KeyboardEvent;
 import com.pema4.scalesynth.base.processors.Processor;
+import com.pema4.scalesynth.dsp.generators.Envelope;
 
+/**
+ * A simple amplifier processor. It controls a volume of the output.
+ */
 public class Amp implements Processor {
     private final Envelope ampEnvelope;
-    private double[][] envelopeOutput = new double[1][8096];
+    private final double[][] envelopeOutput = new double[1][8096]; // to not bother with buffer resizing.
     private double amplitude;
-    private double sampleRate;
 
+    /**
+     * Constructs a new amplifier instance.
+     *
+     * @param ampEnvelope amplitude envelope to use.
+     */
     public Amp(Envelope ampEnvelope) {
         this.ampEnvelope = ampEnvelope;
     }
 
+    /**
+     * Sets a new amlitude (volume of the output).
+     * <p>
+     * This value is supposed to be in range [0, +1].
+     *
+     * @param amplitude amplitude coefficient.
+     */
     public synchronized void setAmplitude(double amplitude) {
         this.amplitude = amplitude;
     }
 
+    /**
+     * Transforms incoming audio.
+     * Note that content of {@code inputs} will be overwritten.
+     *
+     * @param inputs buffers to place generated audio into.
+     * @param n      how many samples to generate.
+     */
     @Override
     public synchronized void process(double[][] inputs, int n) {
         ampEnvelope.generate(envelopeOutput, n);

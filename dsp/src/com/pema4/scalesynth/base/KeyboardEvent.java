@@ -12,9 +12,9 @@ public class KeyboardEvent {
     /**
      * Constructs a new KeyboardEvent instance.
      *
-     * @param type type of this event.
-     * @param note note of this event.
-     * @param freq frequency value of this event (or other floating point value).
+     * @param type  type of this event.
+     * @param note  note of this event.
+     * @param freq  frequency value of this event (or other floating point value).
      * @param value integer value of this event (typically it is velocity).
      */
     public KeyboardEvent(KeyboardEventType type, int note, double freq, int value) {
@@ -26,8 +26,9 @@ public class KeyboardEvent {
 
     /**
      * A factory method for the Note On messages.
-     * @param note note that is on.
-     * @param freq frequency of that note.
+     *
+     * @param note  note that is on.
+     * @param freq  frequency of that note.
      * @param value velocity of that note.
      * @return a corresponding KeyboardEvent.
      */
@@ -37,6 +38,7 @@ public class KeyboardEvent {
 
     /**
      * A factory method for the Note Off messages.
+     *
      * @param note note that is off.
      * @return a corresponding KeyboardEvent.
      */
@@ -46,6 +48,7 @@ public class KeyboardEvent {
 
     /**
      * A factory method for the Pitch Bend messages.
+     *
      * @param lsb least significant byte of the data (data[1])
      * @param msb most significant byte of the data (data[2])
      * @return a corresponding KeyboardEvent.
@@ -59,6 +62,7 @@ public class KeyboardEvent {
 
     /**
      * Returns the type of this event.
+     *
      * @return the type of this event.
      */
     public KeyboardEventType getType() {
@@ -67,6 +71,7 @@ public class KeyboardEvent {
 
     /**
      * Returns the frequency (or another double value) of this event.
+     *
      * @return the frequency of this event.
      */
     public double getFreq() {
@@ -75,6 +80,7 @@ public class KeyboardEvent {
 
     /**
      * Returns the value (typically it is velocity) of this event.
+     *
      * @return the value of this event.
      */
     public int getValue() {
@@ -83,6 +89,7 @@ public class KeyboardEvent {
 
     /**
      * Returns the note of this event (or -1)
+     *
      * @return the note of this event.
      */
     public int getNote() {

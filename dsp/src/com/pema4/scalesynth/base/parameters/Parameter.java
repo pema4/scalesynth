@@ -6,7 +6,7 @@ import java.util.Objects;
 
 /**
  * Represents a parameter wrapper.
- *
+ * <p>
  * Parameters are exposed settings of synthesis.
  * They can be modified from UI.
  */
@@ -82,6 +82,7 @@ public class Parameter<T> {
 
     /**
      * Returns a default value.
+     *
      * @return a default value.
      */
     public T getDefault() {

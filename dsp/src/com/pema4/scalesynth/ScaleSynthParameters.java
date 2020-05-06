@@ -5,6 +5,7 @@ import com.pema4.scalesynth.base.parameters.Parameter;
 
 /**
  * Exposed parameters of the synth.
+ * Their names are self explanatory.
  */
 public class ScaleSynthParameters {
 
