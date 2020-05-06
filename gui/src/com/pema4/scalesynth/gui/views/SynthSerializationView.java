@@ -2,9 +2,11 @@ package com.pema4.scalesynth.gui.views;
 
 import com.pema4.scalesynth.gui.services.SynthSerializationService;
 import javafx.event.ActionEvent;
+import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import javafx.stage.FileChooser;
 
@@ -20,14 +22,15 @@ public class SynthSerializationView extends Parent {
     public SynthSerializationView(SynthSerializationService serializationService) {
         this.serializationService = serializationService;
 
-        var save = new Button("Save settings...");
+        var save = new Button("Save...");
         save.setOnAction(this::handleSave);
 
-        var open = new Button("Open settings...");
+        var open = new Button("Load...");
         open.setOnAction(this::handleOpen);
 
-        var ui = new HBox(5, save, open);
-        getChildren().add(ui);
+        var hbox = new HBox(5, new Label("Settings:"), save, open);
+        hbox.setAlignment(Pos.CENTER);
+        getChildren().add(hbox);
     }
 
 
