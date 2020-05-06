@@ -28,7 +28,7 @@ public class SvfFilter implements Processor {
      *
      * @param amount keyboard tracking amount.
      */
-    public void setEnvelopeAmount(double amount) {
+    public synchronized void setEnvelopeAmount(double amount) {
         this.envelopeAmount = amount;
     }
 
@@ -40,7 +40,7 @@ public class SvfFilter implements Processor {
      *
      * @param cutoff new filter cutoff.
      */
-    public void setCutoff(double cutoff) {
+    public synchronized void setCutoff(double cutoff) {
         this.cutoff = cutoff;
     }
 
@@ -54,7 +54,7 @@ public class SvfFilter implements Processor {
      *
      * @param mode new filter mode.
      */
-    public void setMode(double mode) {
+    public synchronized void setMode(double mode) {
         for (SvfFilterMono filter : filters)
             filter.setMode(mode);
     }
@@ -64,7 +64,7 @@ public class SvfFilter implements Processor {
      *
      * @param Q Q factor value.
      */
-    public void setQ(double Q) {
+    public synchronized void setQ(double Q) {
         for (SvfFilterMono filter : filters)
             filter.setQ(Q);
     }
@@ -76,7 +76,7 @@ public class SvfFilter implements Processor {
      * @param n      how many samples needs processing.
      */
     @Override
-    public void process(double[][] inputs, int n) {
+    public synchronized void process(double[][] inputs, int n) {
         filterEnvelope.generate(filterEnvelopeOutput, n);
         var modulation = filterEnvelopeOutput[0];
         for (int ch = 0; ch < inputs.length; ++ch) {

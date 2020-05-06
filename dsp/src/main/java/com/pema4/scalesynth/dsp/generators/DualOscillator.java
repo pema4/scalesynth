@@ -60,7 +60,7 @@ public class DualOscillator implements Generator {
      *
      * @param masterPulseWidth a new pulse width of the master oscillator.
      */
-    public void setMasterPulseWidth(double masterPulseWidth) {
+    public synchronized void setMasterPulseWidth(double masterPulseWidth) {
         this.masterPulseWidth = masterPulseWidth;
         for (var master : masters)
             master.setPulseWidth(masterPulseWidth);
@@ -74,7 +74,7 @@ public class DualOscillator implements Generator {
      *
      * @param masterMix a new saw-pulse mix of the master oscillator.
      */
-    public void setMasterMix(double masterMix) {
+    public synchronized void setMasterMix(double masterMix) {
         this.masterMix = masterMix;
         for (var master : masters)
             master.setMix(masterMix);
@@ -86,7 +86,7 @@ public class DualOscillator implements Generator {
      *
      * @param slaveOctave how many octaves the slave oscillator is higher than the master
      */
-    public void setSlaveOctave(int slaveOctave) {
+    public synchronized void setSlaveOctave(int slaveOctave) {
         this.slaveOctave = slaveOctave;
         updateFrequencies();
     }
@@ -97,7 +97,7 @@ public class DualOscillator implements Generator {
      *
      * @param slaveSemi how many semitones the slave oscillator is higher than the master
      */
-    public void setSlaveSemi(int slaveSemi) {
+    public synchronized void setSlaveSemi(int slaveSemi) {
         this.slaveSemi = slaveSemi;
         updateFrequencies();
     }
@@ -108,7 +108,7 @@ public class DualOscillator implements Generator {
      *
      * @param slaveFine how many octaves the slave oscillator is higher than the master
      */
-    public void setSlaveFine(int slaveFine) {
+    public synchronized void setSlaveFine(int slaveFine) {
         this.slaveFine = slaveFine;
         updateFrequencies();
     }
@@ -124,7 +124,7 @@ public class DualOscillator implements Generator {
      *
      * @param slavePulseWidth a new pulse width of the slave oscillator.
      */
-    public void setSlavePulseWidth(double slavePulseWidth) {
+    public synchronized void setSlavePulseWidth(double slavePulseWidth) {
         this.slavePulseWidth = slavePulseWidth;
         for (var slave : slaves)
             slave.setPulseWidth(slavePulseWidth);
@@ -138,7 +138,7 @@ public class DualOscillator implements Generator {
      *
      * @param slaveMix a new saw-pulse mix of the slave oscillator.
      */
-    public void setSlaveMix(double slaveMix) {
+    public synchronized void setSlaveMix(double slaveMix) {
         this.slaveMix = slaveMix;
         for (var slave : slaves)
             slave.setMix(slaveMix);
@@ -152,7 +152,7 @@ public class DualOscillator implements Generator {
      *
      * @param syncEnabled is hard sync enabled.
      */
-    public void setSyncEnabled(boolean syncEnabled) {
+    public synchronized void setSyncEnabled(boolean syncEnabled) {
         this.syncEnabled = syncEnabled;
         for (var slave : slaves)
             slave.setSyncEnabled(syncEnabled);
@@ -164,7 +164,7 @@ public class DualOscillator implements Generator {
      *
      * @param masterAmplitude a new noise amplitude of the master oscillator.
      */
-    public void setMasterAmplitude(double masterAmplitude) {
+    public synchronized void setMasterAmplitude(double masterAmplitude) {
         this.masterAmplitude = masterAmplitude;
         for (var master : masters)
             master.setAmplitude(masterAmplitude);
@@ -176,7 +176,7 @@ public class DualOscillator implements Generator {
      *
      * @param slaveAmplitude a new noise amplitude of the slave oscillator.
      */
-    public void setSlaveAmplitude(double slaveAmplitude) {
+    public synchronized void setSlaveAmplitude(double slaveAmplitude) {
         this.slaveAmplitude = slaveAmplitude;
         for (var slave : slaves)
             slave.setAmplitude(slaveAmplitude);
@@ -188,7 +188,7 @@ public class DualOscillator implements Generator {
      *
      * @param noiseAmplitude a new noise amplitude of the noise generator.
      */
-    public void setNoiseAmplitude(double noiseAmplitude) {
+    public synchronized void setNoiseAmplitude(double noiseAmplitude) {
         this.noiseAmplitude = noiseAmplitude;
     }
 
@@ -202,7 +202,7 @@ public class DualOscillator implements Generator {
      *
      * @param drift a new drift coefficient of the oscillators.
      */
-    public void setDrift(double drift) {
+    public synchronized void setDrift(double drift) {
         this.drift = drift;
     }
 
@@ -215,7 +215,7 @@ public class DualOscillator implements Generator {
      *
      * @param voices a new number of unison voices.
      */
-    public void setUnisonVoices(int voices) {
+    public synchronized void setUnisonVoices(int voices) {
         this.unisonVoices = voices;
         createVoices();
     }
@@ -230,7 +230,7 @@ public class DualOscillator implements Generator {
      *
      * @param detune a new amount of detune of unison voices.
      */
-    public void setUnisonDetune(double detune) {
+    public synchronized void setUnisonDetune(double detune) {
         this.unisonDetune = detune;
         updateFrequencies();
     }
@@ -245,7 +245,7 @@ public class DualOscillator implements Generator {
      *
      * @param unisonStereo a new amount of unison stereo width.
      */
-    public void setUnisonStereo(double unisonStereo) {
+    public synchronized void setUnisonStereo(double unisonStereo) {
         this.unisonStereo = unisonStereo;
     }
 

@@ -16,27 +16,27 @@ public class Envelope implements Generator {
     private double decayRate;
     private double releaseRate;
 
-    public void setAttackRate(double attackRate) {
+    public synchronized void setAttackRate(double attackRate) {
         this.attackRate = attackRate;
         attackCoef = Math.pow(1 - 0.01 * attackRate * attackRate / 10000, 44100 / sampleRate);
     }
 
-    public void setDecayRate(double decayRate) {
+    public synchronized void setDecayRate(double decayRate) {
         this.decayRate = decayRate;
         decayCoef = Math.pow(1 - 0.001 * decayRate / 100, 44100 / sampleRate);
     }
 
-    public void setSustainLevel(double sustainLevel) {
+    public synchronized void setSustainLevel(double sustainLevel) {
         this.sustainLevel = sustainLevel;
     }
 
-    public void setReleaseRate(double releaseRate) {
+    public synchronized void setReleaseRate(double releaseRate) {
         this.releaseRate = releaseRate;
         releaseCoef = Math.pow(1 - 0.001 * releaseRate / 100, 44100 / sampleRate);
     }
 
     @Override
-    public void generate(double[][] outputs, int n) {
+    public synchronized void generate(double[][] outputs, int n) {
         var output = outputs[0];
         for (int i = 0; i < n; ++i)
             switch (state) {

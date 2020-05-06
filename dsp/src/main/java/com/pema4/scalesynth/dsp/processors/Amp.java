@@ -13,12 +13,12 @@ public class Amp implements Processor {
         this.ampEnvelope = ampEnvelope;
     }
 
-    public void setAmplitude(double amplitude) {
+    public synchronized void setAmplitude(double amplitude) {
         this.amplitude = amplitude;
     }
 
     @Override
-    public void process(double[][] inputs, int n) {
+    public synchronized void process(double[][] inputs, int n) {
         ampEnvelope.generate(envelopeOutput, n);
         var modulation = envelopeOutput[0];
 
