@@ -7,7 +7,6 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.Priority;
 import javafx.scene.layout.RowConstraints;
 
 import java.util.stream.Stream;
@@ -34,15 +33,11 @@ public class EditorView extends Parent {
         pane.setStyle("-fx-vgap: 5px; -fx-hgap: 5px; -fx-padding: 5px;");
 
         pane.getRowConstraints().addAll(Stream.generate(RowConstraints::new).peek(x -> {
-            x.setFillHeight(true);
             x.setValignment(VPos.TOP);
-            //x.setVgrow(Priority.ALWAYS);
         }).limit(2).toArray(RowConstraints[]::new));
 
         pane.getColumnConstraints().addAll(Stream.generate(ColumnConstraints::new).peek(x -> {
-            x.setFillWidth(true);
             x.setHalignment(HPos.LEFT);
-            x.setHgrow(Priority.ALWAYS);
         }).limit(5).toArray(ColumnConstraints[]::new));
 
         pane.add(master, 0, 0);
