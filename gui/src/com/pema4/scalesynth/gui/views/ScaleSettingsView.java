@@ -8,12 +8,14 @@ import javafx.scene.control.Button;
 import javafx.scene.layout.HBox;
 import javafx.stage.FileChooser;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 
 public class ScaleSettingsView extends Parent {
     private final ScaleService scaleService;
     private final Button resetButton;
+    private File lastDirectory;
 
     public ScaleSettingsView(ScaleService scaleService) {
         this.scaleService = scaleService;
@@ -35,8 +37,10 @@ public class ScaleSettingsView extends Parent {
             var openFileDialog = new FileChooser();
             var extension = new FileChooser.ExtensionFilter("Scala tuning file", "*.scl");
             openFileDialog.getExtensionFilters().addAll(extension);
+            openFileDialog.setInitialDirectory(lastDirectory);
             var file = openFileDialog.showOpenDialog(getScene().getWindow());
             if (file != null) {
+                lastDirectory = file.getParentFile();
                 scaleService.enable(new FileInputStream(file));
                 resetButton.setDisable(false);
             }

@@ -8,12 +8,14 @@ import javafx.scene.control.Button;
 import javafx.scene.layout.HBox;
 import javafx.stage.FileChooser;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
 public class SynthSerializationView extends Parent {
     private final SynthSerializationService serializationService;
+    private File lastDirectory;
 
     public SynthSerializationView(SynthSerializationService serializationService) {
         this.serializationService = serializationService;
@@ -34,9 +36,12 @@ public class SynthSerializationView extends Parent {
             var saveFileDialog = new FileChooser();
             var extension = new FileChooser.ExtensionFilter("ScaleSynth preset file", "*.ssynth");
             saveFileDialog.getExtensionFilters().addAll(extension);
+            saveFileDialog.setInitialDirectory(lastDirectory);
             var file = saveFileDialog.showSaveDialog(getScene().getWindow());
-            if (file != null)
+            if (file != null) {
+                lastDirectory = file.getParentFile();
                 serializationService.save(new FileOutputStream(file));
+            }
         } catch (ReflectiveOperationException | IOException | IllegalArgumentException e) {
             new Alert(Alert.AlertType.ERROR, e.getMessage()).showAndWait();
         }
@@ -47,9 +52,12 @@ public class SynthSerializationView extends Parent {
             var openFileDialog = new FileChooser();
             var extension = new FileChooser.ExtensionFilter("ScaleSynth preset file", "*.ssynth");
             openFileDialog.getExtensionFilters().addAll(extension);
+            openFileDialog.setInitialDirectory(lastDirectory);
             var file = openFileDialog.showOpenDialog(getScene().getWindow());
-            if (file != null)
+            if (file != null) {
+                lastDirectory = file.getParentFile();
                 serializationService.open(new FileInputStream(file));
+            }
         } catch (ReflectiveOperationException | IOException | IllegalArgumentException e) {
             new Alert(Alert.AlertType.ERROR, e.getMessage()).showAndWait();
         }
