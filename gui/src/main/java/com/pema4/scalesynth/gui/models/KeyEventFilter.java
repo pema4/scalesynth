@@ -1,7 +1,5 @@
 package com.pema4.scalesynth.gui.models;
 
-import com.pema4.scalesynth.gui.models.SynthMidiAdapter;
-import com.pema4.scalesynth.gui.services.ScaleService;
 import javafx.event.EventHandler;
 import javafx.scene.input.KeyEvent;
 
@@ -10,17 +8,31 @@ import javax.sound.midi.ShortMessage;
 import java.util.HashSet;
 import java.util.Set;
 
+/**
+ * Keyboard event handler that implements virtual midi keyboard.
+ * <p>
+ * Keys A, S, D, F, G, H, J, K, L are white keys.
+ * <p>
+ * Keys W, E, T, Y, U, O, P are black keys.
+ * <p>
+ * Key Z moves current octave down, X - up.
+ * <p>
+ * Key C decreases velocity, V - increases.
+ */
 public class KeyEventFilter implements EventHandler<KeyEvent> {
     private static final String KEYS_ORDER = "AWSEDFTGYHUJKOLP;']";
     private final Set<Integer> pressedNotes = new HashSet<>();
     private final SynthMidiAdapter midiAdapter;
-    private final ScaleService scaleService;
     private int currentVelocity = 80;
     private int currentOctave = 4;
 
-    public KeyEventFilter(SynthMidiAdapter midiAdapter, ScaleService scaleService) {
+    /**
+     * Constructs a new instance of KeyEventFilter to work with that SynthMidiAdapter.
+     *
+     * @param midiAdapter a SynthMidiAdapter instance to use.
+     */
+    public KeyEventFilter(SynthMidiAdapter midiAdapter) {
         this.midiAdapter = midiAdapter;
-        this.scaleService = scaleService;
     }
 
     /**
@@ -37,9 +49,11 @@ public class KeyEventFilter implements EventHandler<KeyEvent> {
         if (event.getEventType() == KeyEvent.KEY_PRESSED)
             switch (symbol) {
                 case 'Z':
+                    releasePlayingNotes();
                     currentOctave = Math.max(0, currentOctave - 1);
                     break;
                 case 'X':
+                    releasePlayingNotes();
                     currentOctave = Math.min(10, currentOctave + 1);
                     break;
                 case 'C':
@@ -64,25 +78,40 @@ public class KeyEventFilter implements EventHandler<KeyEvent> {
         event.consume();
     }
 
+    /**
+     * Releases all playing notes.
+     */
+    private void releasePlayingNotes() {
+        for (var note : pressedNotes)
+            simulateKeyReleased(note);
+    }
 
+    /**
+     * Simulates a NOTE ON event with note {@code note} and current velocity.
+     *
+     * @param note a note to be simulated.
+     */
     private void simulateKeyPressed(int note) {
         note = Math.min(127, Math.max(0, note));
         pressedNotes.add(note);
-        ShortMessage message = null;
         try {
-            message = new ShortMessage(ShortMessage.NOTE_ON, note + 12 * currentOctave, currentVelocity);
+            ShortMessage message = new ShortMessage(ShortMessage.NOTE_ON, note + 12 * currentOctave, currentVelocity);
             midiAdapter.send(message, -1);
         } catch (InvalidMidiDataException e) {
             e.printStackTrace();
         }
     }
 
+    /**
+     * Simulates a NOTE OFF event with note {@code note} and current velocity.
+     *
+     * @param note a note to be simulated.
+     */
     private void simulateKeyReleased(int note) {
         note = Math.min(127, Math.max(0, note));
         pressedNotes.remove(note);
-        ShortMessage message = null;
         try {
-            message = new ShortMessage(ShortMessage.NOTE_OFF, note + 12 * currentOctave, currentVelocity);
+            ShortMessage message = new ShortMessage(ShortMessage.NOTE_OFF, note + 12 * currentOctave, currentVelocity);
             midiAdapter.send(message, -1);
         } catch (InvalidMidiDataException e) {
             e.printStackTrace();

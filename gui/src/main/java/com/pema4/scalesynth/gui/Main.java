@@ -19,6 +19,9 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 
+/**
+ * Entry point for the program.
+ */
 public class Main extends Application {
     private final ScaleSynth synth = new ScaleSynth();
     private final ScaleService scaleService = new ScaleService();
@@ -31,6 +34,11 @@ public class Main extends Application {
         launch(args);
     }
 
+    /**
+     * Starts an application.
+     *
+     * @param primaryStage primary stage for our scene.
+     */
     @Override
     public void start(Stage primaryStage) {
         Parent root = createUI();
@@ -40,10 +48,15 @@ public class Main extends Application {
         primaryStage.show();
     }
 
+    /**
+     * Composes and returns program UI.
+     *
+     * @return a node representing program UI.
+     */
     private Parent createUI() {
         var pane = new BorderPane();
 
-        pane.addEventFilter(KeyEvent.ANY, new KeyEventFilter(midiAdapter, scaleService));
+        pane.addEventFilter(KeyEvent.ANY, new KeyEventFilter(midiAdapter));
 
         var settings = new HBox(15,
                 new HBox(5,
