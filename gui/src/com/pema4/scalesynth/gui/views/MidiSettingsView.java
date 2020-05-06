@@ -4,9 +4,12 @@ import com.pema4.scalesynth.gui.models.SynthMidiAdapter;
 import com.pema4.scalesynth.gui.services.MidiService;
 import javafx.application.Platform;
 import javafx.beans.value.ObservableValue;
+import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.Label;
+import javafx.scene.layout.HBox;
 
 import javax.sound.midi.MidiUnavailableException;
 import java.util.Objects;
@@ -28,7 +31,9 @@ public class MidiSettingsView extends Parent {
         comboBox.setMaxWidth(150);
         comboBox.setMinWidth(150);
 
-        getChildren().add(comboBox);
+        var hbox = new HBox(5, new Label("Midi inputs:"), comboBox);
+        hbox.setAlignment(Pos.CENTER);
+        getChildren().add(hbox);
     }
 
     private void handleSelectionChanged(ObservableValue<? extends String> observable, String oldValue, String newValue) {

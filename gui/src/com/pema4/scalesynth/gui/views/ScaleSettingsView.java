@@ -2,9 +2,11 @@ package com.pema4.scalesynth.gui.views;
 
 import com.pema4.scalesynth.gui.services.ScaleService;
 import javafx.event.ActionEvent;
+import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import javafx.stage.FileChooser;
 
@@ -19,18 +21,19 @@ public class ScaleSettingsView extends Parent {
 
     public ScaleSettingsView(ScaleService scaleService) {
         this.scaleService = scaleService;
-        resetButton = new Button("Reset scale");
+        resetButton = new Button("Reset");
         resetButton.setOnAction(event -> {
             this.scaleService.disable();
             resetButton.setDisable(true);
         });
         resetButton.setDisable(true);
 
-        Button openButton = new Button("Open scale...");
+        Button openButton = new Button("Open...");
         openButton.setOnAction(this::readScale);
 
-        var ui = new HBox(5, resetButton, openButton);
-        getChildren().add(ui);
+        var hbox = new HBox(5, new Label("Scale:"), resetButton, openButton);
+        hbox.setAlignment(Pos.CENTER);
+        getChildren().add(hbox);
     }
 
     private void readScale(ActionEvent actionEvent) {

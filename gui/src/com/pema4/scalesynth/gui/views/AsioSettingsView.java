@@ -5,9 +5,12 @@ import com.synthbot.jasiohost.AsioDriver;
 import com.synthbot.jasiohost.AsioException;
 import javafx.application.Platform;
 import javafx.beans.value.ObservableValue;
+import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.Label;
+import javafx.scene.layout.HBox;
 
 import java.util.Objects;
 
@@ -25,7 +28,9 @@ public class AsioSettingsView extends Parent {
         comboBox.setMaxWidth(150);
         comboBox.setMinWidth(150);
 
-        getChildren().add(comboBox);
+        var hbox = new HBox(5, new Label("Audio outputs:"), comboBox);
+        hbox.setAlignment(Pos.CENTER);
+        getChildren().add(hbox);
     }
 
     private void handleSelectionChanged(ObservableValue<? extends String> observable, String oldValue, String newValue) {
