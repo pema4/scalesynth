@@ -2,6 +2,7 @@ package com.pema4.scalesynth.base.parameters;
 
 /**
  * Represents a parameter wrapper of some bounded numeric value.
+ *
  * @param <T> type of the value.
  */
 public class NumericParameter<T extends Number> extends Parameter<T> {
@@ -36,6 +37,7 @@ public class NumericParameter<T extends Number> extends Parameter<T> {
 
     /**
      * Return maximum value of this parameter.
+     *
      * @return maximum value of this parameter.
      */
     public T getMax() {

@@ -5,7 +5,7 @@ import com.pema4.scalesynth.base.generators.Generator;
 import com.pema4.scalesynth.base.generators.PolyGenerator;
 import com.pema4.scalesynth.dsp.generators.DualOscillator;
 import com.pema4.scalesynth.dsp.processors.Amp;
-import com.pema4.scalesynth.dsp.processors.Envelope;
+import com.pema4.scalesynth.dsp.generators.Envelope;
 import com.pema4.scalesynth.dsp.processors.SvfFilter;
 
 /**
@@ -14,9 +14,13 @@ import com.pema4.scalesynth.dsp.processors.SvfFilter;
  */
 public class ScaleSynth implements Generator {
     private final ScaleSynthParameters parameters = new ScaleSynthParameters();
-    private final Generator generator = new PolyGenerator(8, this::createVoice)//.then(new Delay());
-    ;
+    private final Generator generator = new PolyGenerator(8, this::createVoice);
 
+    /**
+     * Returns a new generator, representing one voice.
+     *
+     * @return a new voice.
+     */
     private Generator createVoice() {
         Envelope ampEnvelope = createAmpEnvelope();
         Envelope filterEnvelope = createFilterEnvelope();
@@ -27,6 +31,11 @@ public class ScaleSynth implements Generator {
         return dualOscillator.then(filter).then(amp);
     }
 
+    /**
+     * Sets up and returns an amplifier.
+     * @param ampEnvelope an envelope to use.
+     * @return new amplifier processor.
+     */
     private Amp createAmp(Envelope ampEnvelope) {
         var amp = new Amp(ampEnvelope);
         amp.setAmplitude(parameters.ampAmplitude.getDefault());
@@ -34,6 +43,11 @@ public class ScaleSynth implements Generator {
         return amp;
     }
 
+    /**
+     * Sets up and returns a new oscillator.
+     *
+     * @return a new oscillator.
+     */
     private DualOscillator createOscillators() {
         var osc = new DualOscillator();
 
@@ -85,6 +99,12 @@ public class ScaleSynth implements Generator {
         return osc;
     }
 
+    /**
+     * Sets up and returns a new filter.
+     *
+     * @param filterEnvelope an envelope to modulate new filter.
+     * @return a new filter.
+     */
     private SvfFilter createFilter(Envelope filterEnvelope) {
         var filter = new SvfFilter(filterEnvelope);
 
@@ -105,6 +125,11 @@ public class ScaleSynth implements Generator {
         return filter;
     }
 
+    /**
+     * Sets up and returns a new filter envelope.
+     *
+     * @return a new filter envelope.
+     */
     private Envelope createFilterEnvelope() {
         var filterEnvelope = new Envelope();
 
@@ -122,6 +147,11 @@ public class ScaleSynth implements Generator {
         return filterEnvelope;
     }
 
+    /**
+     * Sets up and returns a new amplifier envelope.
+     *
+     * @return a new amplifier envelope.
+     */
     private Envelope createAmpEnvelope() {
         var ampEnvelope = new Envelope();
 
@@ -139,10 +169,22 @@ public class ScaleSynth implements Generator {
         return ampEnvelope;
     }
 
+    /**
+     * Returns an object containing all parameters of this synth.
+     *
+     * @return an instance of the ScaleSynthParameters class used in this synth.
+     */
     public ScaleSynthParameters getParameters() {
         return parameters;
     }
 
+    /**
+     * Generates of the audio.
+     * Note that content of {@code outputs} can be overwritten (this behaviour depends on a subclass).
+     *
+     * @param outputs buffers to place generated audio into.
+     * @param n       how many samples to generate.
+     */
     @Override
     public void generate(double[][] outputs, int n) {
         try {
@@ -152,6 +194,11 @@ public class ScaleSynth implements Generator {
         }
     }
 
+    /**
+     * Sets a sample rate used in processing.
+     *
+     * @param sampleRate new sample rate.
+     */
     @Override
     public void setSampleRate(double sampleRate) {
         generator.setSampleRate(sampleRate);

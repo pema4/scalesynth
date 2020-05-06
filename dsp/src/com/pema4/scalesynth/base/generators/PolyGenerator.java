@@ -6,18 +6,16 @@ import com.pema4.scalesynth.base.KeyboardEventType;
 import java.util.*;
 import java.util.function.Supplier;
 
+/**
+ * Represent a polyphonic generator.
+ * Each voice is created using
+ */
 public class PolyGenerator implements Generator {
-    private final int maxPolyphony;
-    //private final Parameter<Boolean> retrigger = Parameter.booleanParameter("shouldRetrigger");
-    private final Supplier<Generator> voiceSupplier;
-    private final Map<Integer, Generator> noteMapping = new HashMap<>();
     private final Map<Generator, Integer> activeVoices = new LinkedHashMap<>();
     private final Set<Generator> freeVoices = new HashSet<>();
     private final Generator[] voices;
 
     public PolyGenerator(int maxPolyphony, Supplier<Generator> voiceSupplier) {
-        this.voiceSupplier = voiceSupplier;
-        this.maxPolyphony = maxPolyphony;
 
         voices = new Generator[maxPolyphony];
         for (int i = 0; i < maxPolyphony; ++i) {
@@ -27,6 +25,13 @@ public class PolyGenerator implements Generator {
         }
     }
 
+    /**
+     * Generates of the audio.
+     * Note that content of {@code outputs} can be overwritten (this behaviour depends on a subclass).
+     *
+     * @param outputs buffers to place generated audio into.
+     * @param n       how many samples to generate.
+     */
     @Override
     public synchronized void generate(double[][] outputs, int n) {
         int channelCount = outputs.length;
@@ -64,7 +69,7 @@ public class PolyGenerator implements Generator {
     /**
      * Called when the user presses or releases any key.
      * Useful for retriggering envelopes and LFOs.
-     *
+     * <p>
      * In this implementation new note is assigned to any free voice.
      * If there is no free voice, the oldest voice is used.
      *
@@ -110,6 +115,6 @@ public class PolyGenerator implements Generator {
      */
     @Override
     public boolean isActive() {
-        return noteMapping.size() == 0;
+        return activeVoices.size() == 0;
     }
 }

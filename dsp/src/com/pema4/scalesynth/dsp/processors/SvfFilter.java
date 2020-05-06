@@ -2,7 +2,12 @@ package com.pema4.scalesynth.dsp.processors;
 
 import com.pema4.scalesynth.base.KeyboardEvent;
 import com.pema4.scalesynth.base.processors.Processor;
+import com.pema4.scalesynth.dsp.generators.Envelope;
 
+/**
+ * Represents an SVF filter used in signal chain.
+ * User controls cutoff frequency, Q factor, envelope modulation amount and keyboard tracking coefficient.
+ */
 public class SvfFilter implements Processor {
     private final SvfFilterMono[] filters = {new SvfFilterMono(), new SvfFilterMono()};
     private final Envelope filterEnvelope;
@@ -23,7 +28,10 @@ public class SvfFilter implements Processor {
     }
 
     /**
-     * Sets how much envelope influences filter cutoff in the end of attack stage.
+     * Sets how much envelope influences filter cutoff in the end of attack stage (in octaves).
+     * <p>
+     * This value is supposed to be in range [-3, +1].
+     * <p>
      * For example, if envelope amount is -2 octave, cutoff will be moved down by 2 octaves.
      *
      * @param amount keyboard tracking amount.
@@ -34,6 +42,9 @@ public class SvfFilter implements Processor {
 
     /**
      * Sets new filter base cutoff.
+     * <p>
+     * This value is supposed to be in range [20, 20000].
+     * <p>
      * That base cutoff value will be modulated by envelope and keyboard tracking.
      * Note that all values lesser than 5 will be replaced by 0,
      * values greater than sampleRate / 2 - 1 will be replaced by sampleRate / 2 - 1
@@ -46,6 +57,9 @@ public class SvfFilter implements Processor {
 
     /**
      * Sets filter mode.
+     * <p>
+     * This value is supposed to be in range [0, 360].
+     * <p>
      * In this implementation different filter outputs can be mixed in specified proportion.
      * Values from 0 to 90 - low pass + band pass;
      * Values from 90 to 180 - band pass + high pass;
@@ -61,6 +75,8 @@ public class SvfFilter implements Processor {
 
     /**
      * Sets new Q factor value.
+     * <p>
+     * This value is supposed to be in range [0.71, 6].
      *
      * @param Q Q factor value.
      */
@@ -70,10 +86,11 @@ public class SvfFilter implements Processor {
     }
 
     /**
-     * Performs the replace processing of incoming audio.
+     * Transforms incoming audio.
+     * Note that content of {@code inputs} will be overwritten.
      *
-     * @param inputs input audio to be replaced (multiple channels)
-     * @param n      how many samples needs processing.
+     * @param inputs buffers to place generated audio into.
+     * @param n      how many samples to generate.
      */
     @Override
     public synchronized void process(double[][] inputs, int n) {
