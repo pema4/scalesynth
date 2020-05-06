@@ -5,7 +5,6 @@ import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.layout.HBox;
-import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 
 import javax.sound.midi.InvalidMidiDataException;
@@ -18,13 +17,13 @@ import javax.sound.midi.ShortMessage;
 public class KeyboardView extends Parent {
     private static final int START_NOTE = 36;
     private static final int NOTES_COUNT = 36;
-    private static final int KEY_HEIGHT = 100;
-    private static final int KEY_WIDTH = 30;
+    private static final int KEY_HEIGHT = 120;
+    private static final int KEY_WIDTH = 40;
     private final SynthMidiAdapter synth;
 
     /**
      * Creates a new instance of keyboard view that belongs to given synth.
-     * @param synth
+     * @param synth midi adapter of the synthesizer
      */
     public KeyboardView(SynthMidiAdapter synth) {
         this.synth = synth;
@@ -42,6 +41,7 @@ public class KeyboardView extends Parent {
             var note = createKey(START_NOTE + i);
             keyboard.getChildren().add(note);
         }
+        keyboard.setStyle("-fx-border-color: black; -fx-border-radius: 8px; -fx-border-width: 2px;");
 
         return keyboard;
     }
@@ -86,13 +86,12 @@ public class KeyboardView extends Parent {
      */
     private Node createBlackKey() {
         Rectangle key = new Rectangle(KEY_WIDTH * 0.75, KEY_HEIGHT * 0.6);
-        key.getStyleClass().add("black-key");
-        key.setFill(Color.BLACK);
+        key.setStyle("-fx-fill: black;");
 
         // black keys overlap with others
         HBox.setMargin(key, new Insets(0, -key.getWidth() / 2, 0, -key.getWidth() / 2));
 
-        // also blask keys are on top of others
+        // also black keys are on top of others
         key.setViewOrder(Double.NEGATIVE_INFINITY);
         return key;
     }
@@ -103,15 +102,14 @@ public class KeyboardView extends Parent {
      */
     private Node createWhiteKey() {
         Rectangle key = new Rectangle(KEY_WIDTH, KEY_HEIGHT);
-        key.getStyleClass().add("white-key");
-        key.setFill(Color.LIGHTGRAY);
+        key.setStyle("-fx-fill: whitesmoke; -fx-stroke: linear-gradient(whitesmoke, lightgray); -fx-stroke-type: inside; -fx-stroke-width: 2px;");
         return key;
     }
 
     private Node createFirstWhiteKey() {
         Rectangle key = new Rectangle(KEY_WIDTH, KEY_HEIGHT);
-        key.getStyleClass().add("first-white-key");
-        key.setFill(Color.LIGHTGRAY.darker());
+        key.setStyle("-fx-fill: lightgray; -fx-stroke: linear-gradient(gray, darkgray); -fx-stroke-type: inside; -fx-stroke-width: 2px;");
+        key.setViewOrder(-100);
         return key;
     }
 

@@ -7,6 +7,7 @@ import com.pema4.scalesynth.gui.controls.LinearParameterTransform;
 import com.pema4.scalesynth.gui.controls.OnOffButton;
 import javafx.scene.Node;
 import javafx.scene.Parent;
+import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 
@@ -23,34 +24,39 @@ public class SlaveOscillatorEditorView extends Parent {
         var gridPane = new GridPane();
         gridPane.setStyle(
                 "-fx-vgap: 5; -fx-hgap: 5; -fx-padding: 8px; -fx-border-color: black;" +
-                        "-fx-border-radius: 8px; -fx-background-radius: 8px; -fx-border-width: 2px;" +
-                        "-fx-background-color: linear-gradient(#e5ff84, #d5ff86);");
+                "-fx-border-radius: 8px; -fx-background-radius: 8px; -fx-border-width: 2px;" +
+                "-fx-background-color: linear-gradient(#e5ff84, #d5ff86);");
 
         var accentColor = Color.valueOf("#6eb238");
 
+        var label = new Label("Oscillator B");
+        label.setStyle("-fx-font-weight: bold; -fx-font-size: 16px;");
+        label.setTextFill(accentColor.darker());
+        gridPane.add(label, 0 ,0, 4, 1);
+
         var mix = parameters.slaveMix;
         var mixKnob = new Knob<>(mix, LinearParameterTransform.of(mix), accentColor);
-        gridPane.add(mixKnob, 0, 0);
+        gridPane.add(mixKnob, 0, 1);
 
         var pw = parameters.slavePW;
         var pwKnob = new Knob<>(pw, LinearParameterTransform.of(pw), accentColor);
-        gridPane.add(pwKnob, 1, 0);
+        gridPane.add(pwKnob, 1, 1);
 
         var octave = parameters.slaveOctave;
         var octaveKnob = new Knob<>(octave, IntegerParameterTransform.of(octave), accentColor);
-        gridPane.add(octaveKnob, 0, 1);
+        gridPane.add(octaveKnob, 0, 2);
 
         var semi = parameters.slaveSemi;
         var semiKnob = new Knob<>(semi, IntegerParameterTransform.of(semi), accentColor);
-        gridPane.add(semiKnob, 1, 1);
+        gridPane.add(semiKnob, 1, 2);
 
         var fine = parameters.slaveFine;
         var fineKnob = new Knob<>(fine, IntegerParameterTransform.of(fine), accentColor);
-        gridPane.add(fineKnob, 2, 1);
+        gridPane.add(fineKnob, 2, 2);
 
         var sync = parameters.syncEnabled;
         var syncButton = new OnOffButton(sync, accentColor);
-        gridPane.add(syncButton,  3, 1);
+        gridPane.add(syncButton,  3, 2);
 
         return gridPane;
     }

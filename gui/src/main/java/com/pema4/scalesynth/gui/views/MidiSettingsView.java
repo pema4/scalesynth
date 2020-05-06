@@ -2,60 +2,61 @@ package com.pema4.scalesynth.gui.views;
 
 import com.pema4.scalesynth.gui.models.SynthMidiAdapter;
 import com.pema4.scalesynth.gui.services.MidiService;
-import javafx.collections.ObservableList;
-import javafx.geometry.Pos;
+import javafx.beans.value.ObservableValue;
 import javafx.scene.Parent;
 import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
-import javafx.scene.layout.VBox;
 
-import javax.sound.midi.MidiDevice;
 import javax.sound.midi.MidiUnavailableException;
-import java.util.List;
 import java.util.Objects;
 
 public class MidiSettingsView extends Parent {
     private final SynthMidiAdapter midiAdapter;
-    private final ObservableList<MidiDevice.Info> inputInfos;
     private final MidiService midiService;
+    private final ComboBox<String> comboBox;
 
     public MidiSettingsView(SynthMidiAdapter midiAdapter,
                             MidiService midiService) {
         this.midiAdapter = Objects.requireNonNull(midiAdapter);
         this.midiService = Objects.requireNonNull(midiService);
 
-        var updateButton = createUpdateButton();
-        var midiInputsComboBox = createMidiInputsComboBox();
-        inputInfos = midiInputsComboBox.getItems();
-
-        VBox vbox = new VBox(midiInputsComboBox, updateButton);
-        vbox.setAlignment(Pos.CENTER);
-        getChildren().add(vbox);
-    }
-
-    private Button createUpdateButton() {
-        Button button = new Button("Update");
-        button.setOnAction(event -> inputInfos.setAll(midiService.getMidiInputInfos()));
-        return button;
-    }
-
-    private ComboBox<MidiDevice.Info> createMidiInputsComboBox() {
-        ComboBox<MidiDevice.Info> comboBox = new ComboBox<>();
-
-        comboBox.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-            try {
-                midiService.close(oldValue);
-                midiService.open(newValue).setReceiver(midiAdapter);
-            } catch (MidiUnavailableException | NullPointerException e) {
-                new Alert(Alert.AlertType.ERROR, e.getMessage()).showAndWait();
-            }
-        });
-
-        List<MidiDevice.Info> infos = midiService.getMidiInputInfos();
-        comboBox.getItems().setAll(infos);
+        comboBox = new ComboBox<>();
+        comboBox.getSelectionModel().selectedItemProperty().addListener(this::handleSelectionChanged);
+        updateComboBoxItems();
         comboBox.getSelectionModel().selectFirst();
+        comboBox.setMaxWidth(200);
+        comboBox.setMinWidth(200);
 
-        return comboBox;
+        getChildren().add(comboBox);
+    }
+
+    private void handleSelectionChanged(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+        try {
+            switch (newValue) {
+                case "Computer Keyboard":
+                    midiService.close(oldValue);
+                    break;
+                case "Update":
+                    updateComboBoxItems();
+                    if (comboBox.getItems().contains(oldValue))
+                        comboBox.getSelectionModel().select(oldValue);
+                    else
+                        comboBox.getSelectionModel().selectFirst();
+                    break;
+                default:
+                    midiService.close(oldValue);
+                    midiService.open(newValue).setReceiver(midiAdapter);
+                    break;
+            }
+        } catch (MidiUnavailableException | NullPointerException e) {
+            new Alert(Alert.AlertType.ERROR, e.getMessage()).showAndWait();
+        }
+    }
+
+    private void updateComboBoxItems() {
+        var items = comboBox.getItems();
+        items.setAll("Computer Keyboard");
+        items.addAll(midiService.getMidiInputs());
+        items.add("Update");
     }
 }

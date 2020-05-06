@@ -4,9 +4,9 @@ import com.pema4.scalesynth.ScaleSynthParameters;
 import com.pema4.scalesynth.gui.controls.IntegerParameterTransform;
 import com.pema4.scalesynth.gui.controls.Knob;
 import com.pema4.scalesynth.gui.controls.LinearParameterTransform;
-import com.pema4.scalesynth.gui.controls.LogarithmicParameterTransform;
 import javafx.scene.Node;
 import javafx.scene.Parent;
+import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 
@@ -28,21 +28,26 @@ public class UnisonEditorView extends Parent {
 
         var accentColor = Color.valueOf("#2ce9ee");
 
+        var label = new Label("Unison");
+        label.setStyle("-fx-font-weight: bold; -fx-font-size: 16px;");
+        label.setTextFill(accentColor.darker());
+        gridPane.add(label, 0 ,0);
+
         var voices = parameters.unisonVoices;
         var voicesKnob = new Knob<>(voices, IntegerParameterTransform.of(voices), accentColor);
-        gridPane.add(voicesKnob, 0, 0);
+        gridPane.add(voicesKnob, 0, 1);
 
         var detune = parameters.unisonDetune;
         var detuneKnob = new Knob<>(detune, LinearParameterTransform.of(detune), accentColor);
-        gridPane.add(detuneKnob, 0, 1);
+        gridPane.add(detuneKnob, 0, 2);
 
         var width = parameters.unisonStereo;
         var widthKnob = new Knob<>(width, LinearParameterTransform.of(width), accentColor);
-        gridPane.add(widthKnob, 0, 2);
+        gridPane.add(widthKnob, 0, 3);
 
         var drift = parameters.drift;
         var driftKnob = new Knob<>(drift, LinearParameterTransform.of(drift), accentColor);
-        gridPane.add(driftKnob, 0, 3);
+        gridPane.add(driftKnob, 0, 4);
 
         return gridPane;
     }

@@ -34,7 +34,7 @@ public class OnOffButton extends Parent implements ParameterChangeListener<Boole
     }
 
     private Node createUI() {
-        var button = new Rectangle(42, 42);
+        var button = new Rectangle(62, 62);
         button.setStyle("-fx-stroke-width: 2; -fx-arc-height: 8px; -fx-arc-width: 8px; -fx-stroke-type: inside");
         button.setStroke(new LinearGradient(0, 0, 1, 1, true, CycleMethod.NO_CYCLE,
                 new Stop(0, Color.valueOf("#FFFFFF")),

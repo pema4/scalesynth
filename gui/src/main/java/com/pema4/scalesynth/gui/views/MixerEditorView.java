@@ -4,6 +4,7 @@ import com.pema4.scalesynth.ScaleSynthParameters;
 import com.pema4.scalesynth.gui.controls.*;
 import javafx.scene.Node;
 import javafx.scene.Parent;
+import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 
@@ -25,17 +26,22 @@ public class MixerEditorView extends Parent {
 
         var accentColor = Color.valueOf("#35d295");
 
+        var label = new Label("Mixer");
+        label.setStyle("-fx-font-weight: bold; -fx-font-size: 16px;");
+        label.setTextFill(accentColor.darker());
+        gridPane.add(label, 0 ,0, 2, 1);
+
         var master = parameters.masterAmplitude;
         var mixKnob = new Knob<>(master, LogarithmicParameterTransform.of(master), accentColor);
-        gridPane.add(mixKnob, 0, 0);
+        gridPane.add(mixKnob, 0, 1);
 
         var slave = parameters.slaveAmplitude;
         var slaveKnob = new Knob<>(slave, LogarithmicParameterTransform.of(slave), accentColor);
-        gridPane.add(slaveKnob, 0, 1);
+        gridPane.add(slaveKnob, 0, 2);
 
         var noise = parameters.noiseAmplitude;
         var noiseKnob = new Knob<>(noise, LogarithmicParameterTransform.of(noise), accentColor);
-        gridPane.add(noiseKnob, 0, 2);
+        gridPane.add(noiseKnob, 0, 3);
 
         return gridPane;
     }
