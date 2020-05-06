@@ -2,6 +2,8 @@ package com.pema4.scalesynth.gui.views;
 
 import com.pema4.scalesynth.gui.models.SynthAsioAdapter;
 import com.synthbot.jasiohost.AsioDriver;
+import com.synthbot.jasiohost.AsioException;
+import javafx.application.Platform;
 import javafx.beans.value.ObservableValue;
 import javafx.scene.Parent;
 import javafx.scene.control.Alert;
@@ -28,6 +30,9 @@ public class AsioSettingsView extends Parent {
 
     private void handleSelectionChanged(ObservableValue<? extends String> observable, String oldValue, String newValue) {
         try {
+            if (newValue == null)
+                return;
+
             switch (newValue) {
                 case "No audio":
                     asioAdapter.stop();
@@ -44,8 +49,9 @@ public class AsioSettingsView extends Parent {
                     asioAdapter.start(newValue);
                     break;
             }
-        } catch (NullPointerException e) {
+        } catch (AsioException | NullPointerException e) {
             new Alert(Alert.AlertType.ERROR, e.getMessage()).showAndWait();
+            Platform.runLater(() -> comboBox.getSelectionModel().clearSelection());
         }
     }
 

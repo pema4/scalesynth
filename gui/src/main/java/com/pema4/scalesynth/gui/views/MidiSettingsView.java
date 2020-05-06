@@ -2,6 +2,7 @@ package com.pema4.scalesynth.gui.views;
 
 import com.pema4.scalesynth.gui.models.SynthMidiAdapter;
 import com.pema4.scalesynth.gui.services.MidiService;
+import javafx.application.Platform;
 import javafx.beans.value.ObservableValue;
 import javafx.scene.Parent;
 import javafx.scene.control.Alert;
@@ -32,6 +33,9 @@ public class MidiSettingsView extends Parent {
 
     private void handleSelectionChanged(ObservableValue<? extends String> observable, String oldValue, String newValue) {
         try {
+            if (newValue == null)
+                return;
+
             switch (newValue) {
                 case "Computer Keyboard":
                     midiService.close(oldValue);
@@ -48,8 +52,9 @@ public class MidiSettingsView extends Parent {
                     midiService.open(newValue).setReceiver(midiAdapter);
                     break;
             }
-        } catch (MidiUnavailableException | NullPointerException e) {
+        } catch (IllegalArgumentException | MidiUnavailableException | NullPointerException e) {
             new Alert(Alert.AlertType.ERROR, e.getMessage()).showAndWait();
+            Platform.runLater(() -> comboBox.getSelectionModel().select(0));
         }
     }
 
