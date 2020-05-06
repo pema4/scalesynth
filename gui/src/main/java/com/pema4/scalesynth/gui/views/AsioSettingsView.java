@@ -34,15 +34,18 @@ public class AsioSettingsView extends Parent {
                 return;
 
             switch (newValue) {
-                case "No audio":
-                    asioAdapter.stop();
-                    break;
                 case "Update":
                     updateComboBoxItems();
                     if (comboBox.getItems().contains(oldValue))
                         comboBox.getSelectionModel().select(oldValue);
                     else
                         comboBox.getSelectionModel().clearSelection();
+                    break;
+                case "Control Panel...":
+                    var currentDriver = AsioDriver.getCurrentDriver();
+                    if (currentDriver != null)
+                        currentDriver.openControlPanel();
+                    comboBox.getSelectionModel().select(oldValue);
                     break;
                 default:
                     asioAdapter.stop();
@@ -58,6 +61,6 @@ public class AsioSettingsView extends Parent {
     private void updateComboBoxItems() {
         var items = comboBox.getItems();
         items.setAll(AsioDriver.getDriverNames());
-        items.add("Update");
+        items.addAll("Update", "Control Panel...");
     }
 }

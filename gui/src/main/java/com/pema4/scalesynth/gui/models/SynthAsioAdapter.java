@@ -29,6 +29,10 @@ public class SynthAsioAdapter implements AsioDriverListener {
      */
     public void start(String driverName) throws AsioException {
         driver = AsioDriver.getDriver(driverName);
+        start(driver);
+    }
+
+    private void start(AsioDriver driver) throws AsioException {
         driver.addAsioDriverListener(this);
         leftOutput = driver.getChannelOutput(0);
         rightOutput = driver.getChannelOutput(1);
@@ -88,8 +92,8 @@ public class SynthAsioAdapter implements AsioDriverListener {
     @Override
     public void resetRequest() {
         new Thread(() -> {
-            System.out.println("resetRequest() callback received. Returning driver to INITIALIZED state.");
             driver.returnToState(AsioDriverState.INITIALIZED);
+            start(driver);
         }).start();
     }
 
