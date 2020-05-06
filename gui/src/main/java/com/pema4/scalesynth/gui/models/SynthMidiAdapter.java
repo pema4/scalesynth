@@ -28,6 +28,8 @@ public class SynthMidiAdapter implements Receiver {
         if (message.getStatus() == ShortMessage.NOTE_ON) {
             int note = message.getMessage()[1];
             double freq = scaleService.getFreq(note);
+            if (freq > 20000)
+                return;
             int velocity = message.getMessage()[2];
             synth.handleKeyboardEvent(KeyboardEvent.noteOn(note, freq, velocity));
         }
