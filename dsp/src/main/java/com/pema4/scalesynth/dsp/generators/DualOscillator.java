@@ -86,8 +86,8 @@ public class DualOscillator implements Generator {
      *
      * @param slaveOctave how many octaves the slave oscillator is higher than the master
      */
-    public void setSlaveOctave(double slaveOctave) {
-        this.slaveOctave = Math.round(slaveOctave);
+    public void setSlaveOctave(int slaveOctave) {
+        this.slaveOctave = slaveOctave;
         updateFrequencies();
     }
 
@@ -97,8 +97,8 @@ public class DualOscillator implements Generator {
      *
      * @param slaveSemi how many semitones the slave oscillator is higher than the master
      */
-    public void setSlaveSemi(double slaveSemi) {
-        this.slaveSemi = Math.round(slaveSemi);
+    public void setSlaveSemi(int slaveSemi) {
+        this.slaveSemi = slaveSemi;
         updateFrequencies();
     }
 
@@ -108,8 +108,8 @@ public class DualOscillator implements Generator {
      *
      * @param slaveFine how many octaves the slave oscillator is higher than the master
      */
-    public void setSlaveFine(double slaveFine) {
-        this.slaveFine = Math.round(slaveFine);
+    public void setSlaveFine(int slaveFine) {
+        this.slaveFine = slaveFine;
         updateFrequencies();
     }
 

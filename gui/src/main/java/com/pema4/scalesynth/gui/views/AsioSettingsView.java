@@ -3,54 +3,61 @@ package com.pema4.scalesynth.gui.views;
 import com.pema4.scalesynth.gui.models.SynthAsioAdapter;
 import com.synthbot.jasiohost.AsioDriver;
 import com.synthbot.jasiohost.AsioException;
-import javafx.collections.ObservableList;
-import javafx.geometry.Pos;
+import javafx.application.Platform;
+import javafx.beans.value.ObservableValue;
 import javafx.scene.Parent;
 import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
-import javafx.scene.layout.VBox;
 
 import java.util.Objects;
 
 public class AsioSettingsView extends Parent {
     private final SynthAsioAdapter asioAdapter;
-    private final ObservableList<String> outputNames;
+    private final ComboBox<String> comboBox;
 
     public AsioSettingsView(SynthAsioAdapter asioAdapter) {
         this.asioAdapter = Objects.requireNonNull(asioAdapter);
-        var updateButton = createUpdateButton();
-        var asioOutputNamesComboBox = createAsioOutputsComboBox();
-        outputNames = asioOutputNamesComboBox.getItems();
 
-        VBox vbox = new VBox(10, asioOutputNamesComboBox, updateButton);
-        vbox.setAlignment(Pos.CENTER);
-        getChildren().add(vbox);
-    }
-
-    private ComboBox<String> createAsioOutputsComboBox() {
-        var comboBox = new ComboBox<String>();
-
-        comboBox.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-            try {
-                asioAdapter.stop();
-                asioAdapter.start(newValue);
-            } catch (AsioException e) {
-                new Alert(Alert.AlertType.ERROR, e.getMessage()).showAndWait();
-            }
-        });
-
-        var items = AsioDriver.getDriverNames();
-        comboBox.getItems().setAll(items);
+        comboBox = new ComboBox<>();
+        comboBox.getSelectionModel().selectedItemProperty().addListener(this::handleSelectionChanged);
+        updateComboBoxItems();
         comboBox.getSelectionModel().selectFirst();
-        return comboBox;
+        comboBox.setMaxWidth(200);
+        comboBox.setMinWidth(200);
+
+        getChildren().add(comboBox);
     }
 
-    private Button createUpdateButton() {
-        var button = new Button("Update");
-        button.setOnAction(event -> {
-            outputNames.setAll(AsioDriver.getDriverNames());
-        });
-        return button;
+    private void handleSelectionChanged(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+        try {
+            if (newValue == null)
+                return;
+
+            switch (newValue) {
+                case "No audio":
+                    asioAdapter.stop();
+                    break;
+                case "Update":
+                    updateComboBoxItems();
+                    if (comboBox.getItems().contains(oldValue))
+                        comboBox.getSelectionModel().select(oldValue);
+                    else
+                        comboBox.getSelectionModel().clearSelection();
+                    break;
+                default:
+                    asioAdapter.stop();
+                    asioAdapter.start(newValue);
+                    break;
+            }
+        } catch (AsioException | NullPointerException e) {
+            new Alert(Alert.AlertType.ERROR, e.getMessage()).showAndWait();
+            Platform.runLater(() -> comboBox.getSelectionModel().clearSelection());
+        }
+    }
+
+    private void updateComboBoxItems() {
+        var items = comboBox.getItems();
+        items.setAll(AsioDriver.getDriverNames());
+        items.add("Update");
     }
 }

@@ -2,6 +2,7 @@ package com.pema4.scalesynth.base.parameters;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Represents a parameter wrapper.
@@ -54,7 +55,7 @@ public class Parameter<T> {
      * @param value value to be set.
      */
     public void setValue(T value) {
-        if (checkValue(value) && this.value != value) {
+        if (checkValue(value) && !Objects.equals(value, this.value)) {
             this.value = value;
             for (var listener : listeners)
                 listener.valueChanged(value);

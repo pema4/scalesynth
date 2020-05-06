@@ -49,8 +49,8 @@ public class ScaleSynth implements Generator {
         osc.setDrift(parameters.drift.getDefault());
         parameters.drift.addListener(osc::setDrift);
 
-        osc.setSyncEnabled(parameters.ifSynced.getDefault());
-        parameters.ifSynced.addListener(osc::setSyncEnabled);
+        osc.setSyncEnabled(parameters.syncEnabled.getDefault());
+        parameters.syncEnabled.addListener(osc::setSyncEnabled);
 
         osc.setMasterMix(parameters.masterMix.getDefault());
         parameters.masterMix.addListener(osc::setMasterMix);
