@@ -52,7 +52,7 @@ public class KeyboardEvent {
      */
     public static KeyboardEvent pitchBend(byte lsb, byte msb) {
         double bendAmount = (msb * 128) + lsb;
-        var semitones = 2 * bendAmount / (1 << 14) - 1;
+        var semitones = 4 * bendAmount / (1 << 14) - 2; // +-2 range
         var coefficient = Math.pow(2, semitones / 12);
         return new KeyboardEvent(KeyboardEventType.PITCH_BEND, -1, coefficient, -1);
     }
