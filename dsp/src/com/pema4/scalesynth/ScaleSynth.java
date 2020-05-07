@@ -3,9 +3,10 @@ package com.pema4.scalesynth;
 import com.pema4.scalesynth.base.KeyboardEvent;
 import com.pema4.scalesynth.base.generators.Generator;
 import com.pema4.scalesynth.base.generators.PolyGenerator;
+import com.pema4.scalesynth.base.parameters.Parameter;
 import com.pema4.scalesynth.dsp.generators.DualOscillator;
-import com.pema4.scalesynth.dsp.processors.Amp;
 import com.pema4.scalesynth.dsp.generators.Envelope;
+import com.pema4.scalesynth.dsp.processors.Amp;
 import com.pema4.scalesynth.dsp.processors.SvfFilter;
 
 /**
@@ -33,6 +34,7 @@ public class ScaleSynth implements Generator {
 
     /**
      * Sets up and returns an amplifier.
+     *
      * @param ampEnvelope an envelope to use.
      * @return new amplifier processor.
      */
@@ -89,13 +91,13 @@ public class ScaleSynth implements Generator {
 
         osc.setUnisonVoices(parameters.unisonVoices.getDefault());
         parameters.unisonVoices.addListener(osc::setUnisonVoices);
-        
+
         osc.setUnisonDetune(parameters.unisonDetune.getDefault());
         parameters.unisonDetune.addListener(osc::setUnisonDetune);
 
         osc.setUnisonStereo(parameters.unisonStereo.getDefault());
         parameters.unisonStereo.addListener(osc::setUnisonStereo);
-        
+
         return osc;
     }
 
@@ -188,7 +190,7 @@ public class ScaleSynth implements Generator {
     @Override
     public void generate(double[][] outputs, int n) {
         try {
-        generator.generate(outputs, n);
+            generator.generate(outputs, n);
         } catch (Throwable e) {
             e.printStackTrace();
         }
@@ -213,5 +215,23 @@ public class ScaleSynth implements Generator {
     @Override
     public void handleKeyboardEvent(KeyboardEvent keyboardEvent) {
         generator.handleKeyboardEvent(keyboardEvent);
+    }
+
+    /**
+     * Removes all listeners of ScalSynthParameter instance.
+     */
+    public void stop() {
+        var fields = parameters.getClass().getDeclaredFields();
+        try {
+            for (var field : fields) {
+                var parameter = field.get(parameters);
+                if (Parameter.class.isAssignableFrom(field.getType())) {
+                    var method = field.getType().getMethod("close");
+                    method.invoke(parameter);
+                }
+            }
+        } catch (ReflectiveOperationException e) {
+            e.printStackTrace();
+        }
     }
 }

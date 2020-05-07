@@ -10,6 +10,7 @@ import java.util.stream.Collectors;
  * Service class containing some utils for working with MIDI
  */
 public class MidiService {
+    private MidiDevice lastOpenDevice;
     /**
      * Returns information about MIDI IN ports.
      *
@@ -60,5 +61,10 @@ public class MidiService {
         var device = MidiSystem.getMidiDevice(requested.get());
         device.open();
         return device.getTransmitter();
+    }
+
+    public void close() {
+        if (lastOpenDevice != null && lastOpenDevice.isOpen())
+            lastOpenDevice.close();
     }
 }

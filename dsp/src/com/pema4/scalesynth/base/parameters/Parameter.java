@@ -88,4 +88,11 @@ public class Parameter<T> {
     public T getDefault() {
         return defaultValue;
     }
+
+    /**
+     * Removes all listeners.
+     */
+    public void close() {
+        listeners.clear();
+    }
 }

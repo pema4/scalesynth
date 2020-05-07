@@ -9,7 +9,6 @@ import com.pema4.scalesynth.gui.services.ScaleService;
 import com.pema4.scalesynth.gui.services.SynthSerializationService;
 import com.pema4.scalesynth.gui.views.*;
 import javafx.application.Application;
-import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -27,6 +26,7 @@ public class Main extends Application {
     private final SynthMidiAdapter midiAdapter = new SynthMidiAdapter(synth, scaleService);
     private final SynthAsioAdapter asioAdapter = new SynthAsioAdapter(synth);
     private final SynthSerializationService serializationService = new SynthSerializationService(synth.getParameters());
+    private final MidiService midiService = new MidiService();
 
     public static void main(String[] args) {
         System.setProperty("java.library.path", "C:\\javalibs\\jasiohost\\lib");
@@ -60,7 +60,7 @@ public class Main extends Application {
         var settings = new HBox(15,
                 new SynthSerializationView(serializationService),
                 new ScaleSettingsView(scaleService),
-                new MidiSettingsView(midiAdapter, new MidiService()),
+                new MidiSettingsView(midiAdapter, midiService),
                 new AsioSettingsView(asioAdapter));
         settings.setStyle("-fx-background-color: #e6e0dc; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.01), 4, 0.2, 0, 8);" +
                 "-fx-alignment: center; -fx-padding: 5px");
@@ -92,6 +92,8 @@ public class Main extends Application {
     @Override
     public void stop() {
         asioAdapter.stop();
-        midiAdapter.close();
+        midiService.close();
+        synth.stop();
+        System.exit(0); // невероятный костыль
     }
 }

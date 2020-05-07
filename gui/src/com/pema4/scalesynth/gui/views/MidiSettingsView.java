@@ -54,6 +54,7 @@ public class MidiSettingsView extends Parent {
                     break;
                 default:
                     midiService.close(oldValue);
+                    midiAdapter.close();
                     midiService.open(newValue).setReceiver(midiAdapter);
                     break;
             }
