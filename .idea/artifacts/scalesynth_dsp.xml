@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="scalesynth-dsp">
+    <output-path>$PROJECT_DIR$/out/artifacts/scalesynth</output-path>
+    <root id="archive" name="scalesynth-dsp.jar">
+      <element id="module-output" name="dsp" />
+    </root>
+  </artifact>
+</component>
