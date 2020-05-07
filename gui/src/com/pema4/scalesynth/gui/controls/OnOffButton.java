@@ -16,11 +16,20 @@ import javafx.scene.paint.LinearGradient;
 import javafx.scene.paint.Stop;
 import javafx.scene.shape.Rectangle;
 
+/**
+ * Represent a toggle button controlling Boolean Parameter
+ */
 public class OnOffButton extends Parent implements ParameterChangeListener<Boolean> {
     private final Color accentColor;
     private final Parameter<Boolean> parameter;
     private final BooleanProperty enabled = new SimpleBooleanProperty();
 
+    /**
+     * Constructs a new instance of OnOffButton linked to that parameter and colored with accent color.
+     *
+     * @param parameter   a parameter to be wrapped.
+     * @param accentColor an accent color to use.
+     */
     public OnOffButton(Parameter<Boolean> parameter, Color accentColor) {
         this.parameter = parameter;
         this.accentColor = accentColor;
@@ -33,6 +42,11 @@ public class OnOffButton extends Parent implements ParameterChangeListener<Boole
         parameter.setValue(parameter.getDefault());
     }
 
+    /**
+     * Creates UI of the button.
+     *
+     * @return button's UI.
+     */
     private Node createUI() {
         var button = new Rectangle(50, 50);
         button.setStyle("-fx-stroke-width: 2; -fx-arc-height: 8px; -fx-arc-width: 8px; -fx-stroke-type: inside;");
@@ -56,6 +70,11 @@ public class OnOffButton extends Parent implements ParameterChangeListener<Boole
         return vbox;
     }
 
+    /**
+     * Parameter change listener.
+     *
+     * @param value a new value of the parameter.
+     */
     @Override
     public void valueChanged(Boolean value) {
         enabled.setValue(value);
