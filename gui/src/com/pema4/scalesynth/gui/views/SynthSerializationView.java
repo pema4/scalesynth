@@ -15,6 +15,9 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
+/**
+ * Synth serialization view (just label and two buttons wrapped in HBox).
+ */
 public class SynthSerializationView extends Parent {
     private final SynthSerializationService serializationService;
     private File lastDirectory;

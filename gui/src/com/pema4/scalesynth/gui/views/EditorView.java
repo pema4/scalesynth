@@ -17,6 +17,9 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+/**
+ * Parameters editor view.
+ */
 public class EditorView extends Parent {
     private final ScaleSynthParameters parameters;
     private static final String BASE_EDITOR_STYLE =
@@ -32,6 +35,11 @@ public class EditorView extends Parent {
         getChildren().add(ui);
     }
 
+    /**
+     * Returns editor UI.
+     *
+     * @return editor UI.
+     */
     private Node createUI() {
         var pane = new GridPane();
         pane.setStyle("-fx-vgap: 5px; -fx-hgap: 5px; -fx-padding: 5px;");
@@ -53,6 +61,12 @@ public class EditorView extends Parent {
         return pane;
     }
 
+    /**
+     * Returns a list with n column constraints objetcs.
+     *
+     * @param n number of objects.
+     * @return a list with n column constraints objetcs.
+     */
     private List<ColumnConstraints> createColumns(int n) {
         return Stream.generate(ColumnConstraints::new).peek(x -> {
             x.setHgrow(Priority.ALWAYS);
@@ -60,6 +74,12 @@ public class EditorView extends Parent {
         }).limit(n).collect(Collectors.toList());
     }
 
+    /**
+     * Returns a list with n row constraints objetcs.
+     *
+     * @param n number of objects.
+     * @return a list with n row constraints objetcs.
+     */
     private List<RowConstraints> createRows(int n) {
         var rows = Stream.generate(RowConstraints::new).peek(x -> {
             x.setVgrow(Priority.ALWAYS);
@@ -69,6 +89,10 @@ public class EditorView extends Parent {
         return rows;
     }
 
+    /**
+     * Returns first oscillator editor.
+     * @return first oscillator editor.
+     */
     private Node createFirstOscillatorEditor() {
         var pane = new GridPane();
         pane.setStyle(BASE_EDITOR_STYLE + "-fx-background-color: linear-gradient(#e5ff84, #d5ff86);");
@@ -93,6 +117,10 @@ public class EditorView extends Parent {
         return pane;
     }
 
+    /**
+     * Returns second oscillator editor.
+     * @return second oscillator editor.
+     */
     private Node createSecondOscillatorEditor() {
         var pane = new GridPane();
         pane.setStyle(BASE_EDITOR_STYLE + "-fx-background-color: linear-gradient(#c9f4a5, #bef4a8);");
@@ -133,6 +161,10 @@ public class EditorView extends Parent {
         return pane;
     }
 
+    /**
+     * Returns unison editor.
+     * @return unison editor.
+     */
     private Node createUnisonEditor() {
         var pane = new GridPane();
         pane.setStyle(BASE_EDITOR_STYLE + "-fx-background-color: linear-gradient(#c4ffdf, #c5ffd4);");
@@ -165,7 +197,10 @@ public class EditorView extends Parent {
         return pane;
     }
 
-
+    /**
+     * Returns mixer editor.
+     * @return mixer editor.
+     */
     private Node createMixerEditor() {
         var pane = new GridPane();
         pane.setStyle(BASE_EDITOR_STYLE + "-fx-background-color: linear-gradient(#bdffee, #c3faff);");
@@ -194,6 +229,10 @@ public class EditorView extends Parent {
         return pane;
     }
 
+    /**
+     * Returns filter editor.
+     * @return filter editor.
+     */
     private Node createFilterEditor() {
         var pane = new GridPane();
         pane.setStyle(BASE_EDITOR_STYLE + "-fx-background-color: linear-gradient(lightblue, lightskyblue);");
@@ -226,6 +265,10 @@ public class EditorView extends Parent {
         return pane;
     }
 
+    /**
+     * Returns amp envelope editor.
+     * @return amp envelope editor.
+     */
     private Node createAmpEgEditor() {
         var pane = new GridPane();
         pane.setStyle(BASE_EDITOR_STYLE + "-fx-background-color: linear-gradient(#ffccd2, #ffd3e4);");
@@ -262,6 +305,10 @@ public class EditorView extends Parent {
         return pane;
     }
 
+    /**
+     * Returns filter envelope editor.
+     * @return filter envelope editor.
+     */
     private Node createFilterEgEditor() {
         var pane = new GridPane();
         pane.setStyle(BASE_EDITOR_STYLE + "-fx-background-color: linear-gradient(#ffddbc, #ffd5c2);");
