@@ -93,5 +93,6 @@ public class Main extends Application {
     public void stop() {
         asioAdapter.stop();
         midiAdapter.close();
+        synth.stop();
     }
 }
