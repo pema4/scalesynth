@@ -14,6 +14,9 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 
+/**
+ * Scale settings view (just label and two buttons wrapped in HBox).
+ */
 public class ScaleSettingsView extends Parent {
     private final ScaleService scaleService;
     private final Button resetButton;

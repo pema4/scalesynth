@@ -107,6 +107,10 @@ public class KeyboardView extends Parent {
         return key;
     }
 
+    /**
+     * Returns an instance of white key (first in an octave).
+     * @return a node representing white key.
+     */
     private Node createFirstWhiteKey() {
         Rectangle key = new Rectangle(KEY_WIDTH, KEY_HEIGHT);
         key.setStyle("-fx-fill: lightgray; -fx-stroke: linear-gradient(lightgray, darkgray); -fx-stroke-type: inside; -fx-stroke-width: 2px;");
@@ -114,6 +118,13 @@ public class KeyboardView extends Parent {
         return key;
     }
 
+    /**
+     * Helper function to create MIDI message.
+     * @param status a status byte
+     * @param data1 a first byte of data
+     * @param data2 a second byte of data.
+     * @return resulting message.
+     */
     private ShortMessage createShortMessage(int status, int data1, int data2) {
         try {
             return new ShortMessage(status, data1, data2);

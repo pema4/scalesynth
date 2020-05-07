@@ -14,6 +14,9 @@ import javafx.scene.layout.HBox;
 
 import java.util.Objects;
 
+/**
+ * ASIO settings view.
+ */
 public class AsioSettingsView extends Parent {
     private final SynthAsioAdapter asioAdapter;
     private final ComboBox<String> comboBox;

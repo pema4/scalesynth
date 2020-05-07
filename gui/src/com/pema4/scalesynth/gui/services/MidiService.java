@@ -2,7 +2,6 @@ package com.pema4.scalesynth.gui.services;
 
 import javax.sound.midi.*;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -11,6 +10,7 @@ import java.util.stream.Collectors;
  */
 public class MidiService {
     private MidiDevice lastOpenDevice;
+
     /**
      * Returns information about MIDI IN ports.
      *
@@ -20,6 +20,11 @@ public class MidiService {
         return getMidiInputInfo().stream().map(MidiDevice.Info::getName).collect(Collectors.toList());
     }
 
+    /**
+     * Returns a list of MIDI IN ports.
+     *
+     * @return a list of MIDI IN ports.
+     */
     private List<MidiDevice.Info> getMidiInputInfo() {
         List<MidiDevice.Info> infos = new ArrayList<>();
         for (var info : MidiSystem.getMidiDeviceInfo())
@@ -51,8 +56,14 @@ public class MidiService {
         }
     }
 
-    @SuppressWarnings("uncheck")
-    public Transmitter open(String name) throws MidiUnavailableException, NullPointerException {
+    /**
+     * Opens a MidiDevice with that name.
+     *
+     * @param name MidiDevice name.
+     * @return opened MidiDevice.
+     * @throws MidiUnavailableException thrown when MidiDevice is unavailable.
+     */
+    public Transmitter open(String name) throws MidiUnavailableException {
         var info = getMidiInputInfo();
         var requested = info.stream().filter(x -> x.getName().equals(name)).findFirst();
         if (requested.isEmpty())
@@ -63,6 +74,9 @@ public class MidiService {
         return device.getTransmitter();
     }
 
+    /**
+     * Closes last open MidiDevice.
+     */
     public void close() {
         if (lastOpenDevice != null && lastOpenDevice.isOpen())
             lastOpenDevice.close();

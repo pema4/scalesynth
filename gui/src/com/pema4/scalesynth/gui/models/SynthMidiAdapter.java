@@ -6,10 +6,18 @@ import com.pema4.scalesynth.gui.services.ScaleService;
 
 import javax.sound.midi.*;
 
+/**
+ * This wrapper captures incoming MIDI messages and passes then to synthesizer.
+ */
 public class SynthMidiAdapter implements Receiver {
     private final ScaleSynth synth;
     private final ScaleService scaleService;
 
+    /**
+     * Creates a new MIDI wrapper for ScaleSynth.
+     *
+     * @param synth wrapped synthesizer.
+     */
     public SynthMidiAdapter(ScaleSynth synth, ScaleService scaleService) {
         this.synth = synth;
         this.scaleService = scaleService;

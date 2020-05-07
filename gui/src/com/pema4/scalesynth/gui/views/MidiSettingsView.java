@@ -14,6 +14,9 @@ import javafx.scene.layout.HBox;
 import javax.sound.midi.MidiUnavailableException;
 import java.util.Objects;
 
+/**
+ * MIDI settings view (just label and combobox).
+ */
 public class MidiSettingsView extends Parent {
     private final SynthMidiAdapter midiAdapter;
     private final MidiService midiService;
