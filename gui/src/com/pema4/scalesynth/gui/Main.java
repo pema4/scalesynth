@@ -29,7 +29,6 @@ public class Main extends Application {
     private final MidiService midiService = new MidiService();
 
     public static void main(String[] args) {
-        System.setProperty("java.library.path", "C:\\javalibs\\jasiohost\\lib");
         launch(args);
     }
 
