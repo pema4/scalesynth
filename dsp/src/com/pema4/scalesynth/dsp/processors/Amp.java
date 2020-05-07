@@ -1,6 +1,7 @@
 package com.pema4.scalesynth.dsp.processors;
 
 import com.pema4.scalesynth.base.KeyboardEvent;
+import com.pema4.scalesynth.base.KeyboardEventType;
 import com.pema4.scalesynth.base.processors.Processor;
 import com.pema4.scalesynth.dsp.generators.Envelope;
 
@@ -11,6 +12,7 @@ public class Amp implements Processor {
     private final Envelope ampEnvelope;
     private final double[][] envelopeOutput = new double[1][8096]; // to not bother with buffer resizing.
     private double amplitude;
+    private double velocity = 1;
 
     /**
      * Constructs a new amplifier instance.
@@ -22,7 +24,7 @@ public class Amp implements Processor {
     }
 
     /**
-     * Sets a new amlitude (volume of the output).
+     * Sets a new amplitude (volume of the output).
      * <p>
      * This value is supposed to be in range [0, +1].
      *
@@ -46,7 +48,7 @@ public class Amp implements Processor {
 
         for (int ch = 0; ch < inputs.length; ++ch)
             for (int i = 0; i < inputs[ch].length; ++i)
-                inputs[ch][i] = inputs[ch][i] * amplitude * modulation[i];
+                inputs[ch][i] = inputs[ch][i] * velocity * amplitude * modulation[i];
     }
 
     /**
@@ -67,6 +69,8 @@ public class Amp implements Processor {
      */
     @Override
     public void handleKeyboardEvent(KeyboardEvent keyboardEvent) {
+        if (keyboardEvent.getType() == KeyboardEventType.NOTE_ON)
+            velocity = 0.2 + 0.8 * keyboardEvent.getValue() / 127;
         ampEnvelope.handleKeyboardEvent(keyboardEvent);
     }
 
