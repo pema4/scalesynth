@@ -5,7 +5,6 @@ import com.pema4.scalesynth.scl.ScaleParser;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * Service with various tools for handling custom scales.

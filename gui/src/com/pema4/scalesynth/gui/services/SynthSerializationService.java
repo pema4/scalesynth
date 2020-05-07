@@ -11,13 +11,29 @@ import java.lang.reflect.ParameterizedType;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Service with various tools for saving and loading state of parameters.
+ */
 public class SynthSerializationService {
     private final ScaleSynthParameters parameters;
 
+    /**
+     * Constructs a new instance of serialization service.
+     *
+     * @param parameters synth parameters to work with.
+     */
     public SynthSerializationService(ScaleSynthParameters parameters) {
         this.parameters = parameters;
     }
 
+    /**
+     * Reads a state from that parameters object.
+     * State is represented as pairs "field name" - "parameter value"
+     *
+     * @param parameters serialized parameters.
+     * @return current parameters state.
+     * @throws ReflectiveOperationException thrown when
+     */
     private static Map<String, Object> getState(ScaleSynthParameters parameters) throws ReflectiveOperationException {
         var fields = parameters.getClass().getDeclaredFields();
         var state = new HashMap<String, Object>();
@@ -33,14 +49,13 @@ public class SynthSerializationService {
         return state;
     }
 
-    @SuppressWarnings("unchecked")
-    public void open(InputStream stream) throws ReflectiveOperationException {
-        XMLDecoder decoder = new XMLDecoder(stream);
-        Map<String, Object> state = (Map<String, Object>) decoder.readObject();
-        decoder.close();
-        setState(parameters, state);
-    }
-
+    /**
+     * Updates parameters with values from state.
+     *
+     * @param parameters parameters to be updated.
+     * @param state      new values.
+     * @throws ReflectiveOperationException error in reading plugin parameters.
+     */
     private static void setState(ScaleSynthParameters parameters, Map<String, Object> state) throws ReflectiveOperationException {
         var fields = parameters.getClass().getDeclaredFields();
         for (var field : fields) {
@@ -65,6 +80,26 @@ public class SynthSerializationService {
         }
     }
 
+    /**
+     * Read state from the file and updates parameters with this.
+     *
+     * @param stream input stream to read from.
+     * @throws ReflectiveOperationException error in reading plugin parameters.
+     */
+    @SuppressWarnings("unchecked")
+    public void open(InputStream stream) throws ReflectiveOperationException {
+        XMLDecoder decoder = new XMLDecoder(stream);
+        Map<String, Object> state = (Map<String, Object>) decoder.readObject();
+        decoder.close();
+        setState(parameters, state);
+    }
+
+    /**
+     * Saves current parameters values to the file.
+     *
+     * @param stream output stream to save to.
+     * @throws ReflectiveOperationException error in reading plugin parameters.
+     */
     public void save(OutputStream stream) throws ReflectiveOperationException {
         var state = getState(parameters);
         XMLEncoder encoder = new XMLEncoder(stream);
