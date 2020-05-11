@@ -2,7 +2,7 @@
 
 ## Build
 
-To build this project you need to download [JAsioHost](https://github.com/mhroth/jasiohost).
+To build this project you need to download [JAsioHost](https://github.com/mhroth/jasiohost), [OpenJFX 11](https://openjfx.io/) and [OpenJDK 11](https://adoptopenjdk.net/).
 
 ## Launch
 
