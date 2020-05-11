@@ -6,5 +6,5 @@ module scalesynth.gui {
     requires scalesynth.dsp;
     requires scalesynth.scl;
 
-    exports com.pema4.scalesynth.gui;
+    exports com.scalesynth.gui;
 }

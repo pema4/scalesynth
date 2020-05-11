@@ -1,8 +1,8 @@
 module scalesynth.dsp {
-    exports com.pema4.scalesynth;
-    exports com.pema4.scalesynth.base;
-    exports com.pema4.scalesynth.base.parameters;
+    exports com.scalesynth;
+    exports com.scalesynth.base;
+    exports com.scalesynth.base.parameters;
 
     // for serialization
-    opens com.pema4.scalesynth to scalesynth.gui;
+    opens com.scalesynth to scalesynth.gui;
 }
